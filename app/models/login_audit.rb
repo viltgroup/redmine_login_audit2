@@ -5,6 +5,7 @@ class LoginAudit < ActiveRecord::Base
 
   before_create :filter_out_api_key
   before_create :truncate_url
+  before_create :truncate_referer
 
   validates :ip_address, presence: true
   validates :login, length: { maximum: 255 }, allow_blank: true
@@ -48,6 +49,7 @@ class LoginAudit < ActiveRecord::Base
       api: api,
       url: request.fullpath,
       method: request.request_method,
+      referer: request.referer,
       created_on: Time.current
     )
 
@@ -131,12 +133,20 @@ class LoginAudit < ActiveRecord::Base
     self.url = url.truncate(255, separator: nil, omission: '[...]')
   end
 
-  # APIキーをフィルタリング
+  def truncate_referer
+    return unless referer
+    self.referer = referer.truncate(255, separator: nil, omission: '[...]')
+  end
+
   def filter_out_api_key
     return unless plugin_setting('audit_api_filter_out_keys')
-    return unless url
 
-    self.url = url.sub(/key=[^&]+/, 'key=[FILTERED]')
+    if url
+      self.url = url.sub(/key=[^&]+/, 'key=[FILTERED]')
+    end
+    if referer
+      self.referer = referer.sub(/key=[^&]+/, 'key=[FILTERED]')
+    end
   end
 
   def plugin_setting(key)

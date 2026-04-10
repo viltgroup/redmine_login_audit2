@@ -16,6 +16,11 @@ fr:
   field_source: Source
   field_method: Méthode
   field_url: URL
+  field_api: Source
+  label_source_web: Web
+  label_source_api: API
+  label_date_from: Du
+  label_date_to: Au
 
   # Settings
   setting_log_setting: Paramètres de journalisation

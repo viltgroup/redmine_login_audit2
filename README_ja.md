@@ -1,8 +1,8 @@
 # Redmine Login Audit 2
 
-Redmine 6.x 用のログイン監査プラグインです。
+Redmine 6.x/7.0 用のログイン監査プラグインです。
 
-[redmine_login_audit](https://github.com/martin-denizet/redmine_login_audit)（Martin Denizet氏作）を Redmine 6.x / Rails 7.2 向けにリファクタリングしました。
+[redmine_login_audit](https://github.com/martin-denizet/redmine_login_audit)（Martin Denizet氏作）を Redmine 6.x / 7.0 向けにリファクタリングしました。
 
 ## 機能
 
@@ -15,8 +15,6 @@ Redmine 6.x 用のログイン監査プラグインです。
 ## 動作要件
 
 - Redmine 6.0以上
-- Ruby 3.2以上
-- Rails 7.2
 
 ## インストール
 
@@ -52,7 +50,7 @@ bundle exec rake redmine_login_audit2:check RAILS_ENV=production
 bundle exec rake redmine_login_audit2:migrate_from_v1 RAILS_ENV=production
 
 # 5. Redmine再起動
-touch tmp/restart.txt
+systemctl restart httpd
 
 # 6. (任意) 旧マイグレーションレコード削除
 bundle exec rake redmine_login_audit2:cleanup_v1 RAILS_ENV=production
@@ -60,13 +58,14 @@ bundle exec rake redmine_login_audit2:cleanup_v1 RAILS_ENV=production
 
 ### Rakeタスク一覧
 
-| タスク | 説明 |
-|--------|------|
-| `redmine_login_audit2:check` | 状態確認 |
-| `redmine_login_audit2:migrate_from_v1` | 旧プラグインから移行 |
-| `redmine_login_audit2:cleanup_v1` | 旧マイグレーションレコード削除 |
-| `redmine_login_audit2:stats` | 統計表示 |
-| `redmine_login_audit2:purge MONTHS=6` | 古いログ削除 |
+
+| タスク                                 | 説明                           |
+| ---------------------------------------- | -------------------------------- |
+| `redmine_login_audit2:check`           | 状態確認                       |
+| `redmine_login_audit2:migrate_from_v1` | 旧プラグインから移行           |
+| `redmine_login_audit2:cleanup_v1`      | 旧マイグレーションレコード削除 |
+| `redmine_login_audit2:stats`           | 統計表示                       |
+| `redmine_login_audit2:purge MONTHS=6`  | 古いログ削除                   |
 
 ## アンインストール
 
@@ -80,20 +79,28 @@ rm -rf plugins/redmine_login_audit2
 
 「管理」→「プラグイン」→「Redmine Login Audit 2」→「設定」
 
-| 項目 | 説明 |
-|------|------|
-| ログ記録設定 | 記録しない / 成功のみ / 失敗のみ / 両方 |
-| API監査 | APIアクセスも記録 |
-| APIキーをフィルタ | URLのAPIキーを[FILTERED]に置換 |
-| 1ページの表示件数 | 管理画面の表示件数 |
+
+| 項目              | 説明                                    |
+| ------------------- | ----------------------------------------- |
+| ログ記録設定      | 記録しない / 成功のみ / 失敗のみ / 両方 |
+| API監査           | APIアクセスも記録                       |
+| APIキーをフィルタ | URLのAPIキーを[FILTERED]に置換          |
+| 1ページの表示件数 | 管理画面の表示件数                      |
 
 ## 使い方
 
-「管理」→「ログイン監査」
+「管理」→「ログイン監査」からログを表示。
 
-### フィルター
+### フィルタ
 
-- ログインID、IPアドレス、成功/失敗、Web/API、日付範囲
+Redmine標準のフィルタUIを使用。「フィルタ追加」から条件を選び、演算子（含む・等しい・前方一致・日付範囲など）で自由に組み合わせられる。
+
+- ログインID / IPアドレス / メソッド / URL（テキスト演算子）
+- 成功（はい / いいえ）
+- ソース（Web / API）
+- 作成日（今日・過去N日・範囲などの日付演算子）
+
+現在のフィルタ状態は統計ページにも引き継がれる。
 
 ### ログ削除
 
@@ -102,13 +109,14 @@ rm -rf plugins/redmine_login_audit2
 
 ## 対応認証方式
 
-| 方式 | 成功 | 失敗 | 備考 |
-|------|:----:|:----:|------|
-| Redmine標準ログイン | ✓ | ✓ | 組み込み |
-| LDAP / Active Directory | ✓ | ✓ | 標準の`try_to_login`経由 |
-| REST API | ✓ | ✓ | 組み込み |
-| SAML (redmine_saml) | ✓ | ✓ | 組み込み |
-| 他のOmniAuth系 | ✓ | — | 失敗は拡張が必要 |
+
+| 方式                    | 成功 | 失敗 | 備考                     |
+| ------------------------- | :----: | :----: | -------------------------- |
+| Redmine標準ログイン     |  ✓  |  ✓  | 組み込み                 |
+| LDAP / Active Directory |  ✓  |  ✓  | 標準の`try_to_login`経由 |
+| REST API                |  ✓  |  ✓  | 組み込み                 |
+| SAML (redmine_saml)     |  ✓  |  ✓  | 組み込み                 |
+| 他のOmniAuth系          |  ✓  |  —  | 失敗は拡張が必要         |
 
 **成功ログ**は Redmine の `controller_account_success_authentication_after` フック経由で全認証方式に対応。
 
@@ -120,13 +128,14 @@ redmine_omniauth_google、redmine_omniauth_azure 等を使っている場合、�
 
 ### 手順1: コールバックメソッド名を確認
 
-| プラグイン | コールバック |
-|-----------|-------------|
-| redmine_saml | `login_with_saml_callback` |
-| redmine_omniauth_google | `oauth_google_callback` |
-| redmine_omniauth_github | `oauth_github_callback` |
-| redmine_omniauth_azure | `oauth_azure_callback` |
-| redmine_openid_connect | `oic_callback` |
+
+| プラグイン              | コールバック               |
+| ------------------------- | ---------------------------- |
+| redmine_saml            | `login_with_saml_callback` |
+| redmine_omniauth_google | `oauth_google_callback`    |
+| redmine_omniauth_github | `oauth_github_callback`    |
+| redmine_omniauth_azure  | `oauth_azure_callback`     |
+| redmine_openid_connect  | `oic_callback`             |
 
 ### 手順2: オーバーライドを追加
 
@@ -182,9 +191,31 @@ end
 - 全削除保護（チェックボックス確認必須）
 - HTML5日付入力（カレンダーヘルパー不要）
 
+## 変更履歴
+
+### v1.0.2 (2026-07-12)
+
+- フィルタをRedmineコアのQuery APIへ移行：独自フィルタロジックを廃止し、標準フィルタUI（演算子・フィルタの追加/削除・複数値）に統一
+- Redmine 7.0対応。メニュー・凡例アイコンをSVGスプライト（`sprite_icon`）へ移行し、6.x向けフォールバックも用意
+- 統計ページを追加：成功/失敗・API/Web比率、日別推移、失敗の多いIP・ログイン上位
+- ログインイベントごとのHTTP Referer記録を追加
+- 初回表示でper_pageが反映されない不具合を修正
+- 全同梱ロケールにフィルタ用ラベル（ソース・日付範囲）を追加
+
+### v1.0.0 (2025-04-10)
+
+- 初回リリース（redmine_login_auditからのリファクタリング）
+- Redmine 6.x / Rails 7.2 対応
+- Webログイン・APIアクセスの記録
+- SAML/SSO失敗ログの記録（redmine_saml対応）
+- CSVストリーミングエクスポート（バッチ処理）
+- パージUI改善（最古ログ日付表示）
+- 全削除保護（チェックボックス確認）
+- HTML5日付入力
+
 ## ライセンス
 
-MIT License
+GNU General Public License v2.0
 
 ## クレジット
 

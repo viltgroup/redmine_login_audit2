@@ -18,6 +18,11 @@ ru:
   field_source: Источник
   field_method: Метод
   field_url: URL
+  field_api: Источник
+  label_source_web: Веб
+  label_source_api: API
+  label_date_from: С
+  label_date_to: По
 
   # Settings
   setting_log_setting: Настройки журналирования

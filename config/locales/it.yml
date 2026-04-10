@@ -16,6 +16,11 @@ it:
   field_source: Fonte
   field_method: Metodo
   field_url: URL
+  field_api: Fonte
+  label_source_web: Web
+  label_source_api: API
+  label_date_from: Da
+  label_date_to: A
 
   # Settings
   setting_log_setting: Impostazioni di registrazione

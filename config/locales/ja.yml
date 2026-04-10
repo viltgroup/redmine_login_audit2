@@ -16,6 +16,11 @@ ja:
   field_source: ソース
   field_method: メソッド
   field_url: URL
+  field_api: ソース
+  label_source_web: Web
+  label_source_api: API連携
+  label_date_from: 開始日
+  label_date_to: 終了日
 
   # 設定
   setting_log_setting: ログ記録設定
@@ -50,3 +55,14 @@ ja:
 
   # 権限（将来用）
   permission_view_login_audit: ログイン監査の閲覧
+
+  # 統計
+  label_stats: 統計
+  label_stats_ratio: 比率
+  label_stats_success_failure: 成功 / 失敗
+  label_stats_api_web: API / Web
+  label_stats_daily: 日別推移（直近30日）
+  label_stats_top_failure_ips: 失敗IPアドレス上位
+  label_stats_top_failure_logins: 失敗ログインID上位
+  label_stats_period: 対象期間
+  label_stats_no_data: データなし

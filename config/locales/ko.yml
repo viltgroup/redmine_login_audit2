@@ -16,6 +16,11 @@ ko:
   field_source: 소스
   field_method: 메소드
   field_url: URL
+  field_api: 소스
+  label_source_web: 웹
+  label_source_api: API
+  label_date_from: 시작일
+  label_date_to: 종료일
 
   # Settings
   setting_log_setting: 로깅 설정

@@ -16,7 +16,11 @@ en:
   field_source: Source
   field_method: Method
   field_url: URL
-
+  field_api: Source
+  label_source_web: Web
+  label_source_api: API
+  label_date_from: From
+  label_date_to: To
   # Settings
   setting_log_setting: Logging Setting
   setting_audit_api: Audit API
@@ -50,3 +54,14 @@ en:
 
   # Permissions (for future use)
   permission_view_login_audit: View login audit
+
+  # Statistics
+  label_stats: Statistics
+  label_stats_ratio: Ratio
+  label_stats_success_failure: Success / Failure
+  label_stats_api_web: API / Web
+  label_stats_daily: Daily Trend (Last 30 days)
+  label_stats_top_failure_ips: Top Failure IPs
+  label_stats_top_failure_logins: Top Failure Logins
+  label_stats_period: Period
+  label_stats_no_data: No data

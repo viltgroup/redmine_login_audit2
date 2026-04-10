@@ -1,43 +1,23 @@
 <h2><%= l(:label_login_audit) %></h2>
-
-<%= form_tag({action: 'index'}, method: :get, id: 'login_audit_filter_form') do %>
-<fieldset id="filters" class="collapsible collapsed">
-  <legend onclick="toggleFieldset(this);" class="icon icon-collapsed"><%= l(:label_filter_plural) %></legend>
-  <div style="display: none;">
-    <table class="login-audit-filters">
-      <tr>
-        <td class="field">
-          <label for="login"><%= l(:field_login) %>:</label>
-          <%= text_field_tag 'login', params[:login], size: 20 %>
-        </td>
-        <td class="field">
-          <label for="ip_address"><%= l(:field_ip_address) %>:</label>
-          <%= text_field_tag 'ip_address', params[:ip_address], size: 20 %>
-        </td>
-        <td class="field">
-          <label for="success"><%= l(:field_success) %>:</label>
-          <%= select_tag 'success', options_for_select(options_for_success_filter, params[:success]) %>
-        </td>
-        <td class="field">
-          <label for="api"><%= l(:field_source) %>:</label>
-          <%= select_tag 'api', options_for_select(options_for_api_filter, params[:api]) %>
-        </td>
-        <td class="field" colspan="4">
-          <label for="from_date"><%= l(:label_date_from) %>:</label>
-          <%= date_field_tag 'from_date', params[:from_date], size: 10 %>
-          <span style="margin: 0 10px;">〜</span>
-          <label for="to_date"><%= l(:label_date_to) %>:</label>
-          <%= date_field_tag 'to_date', params[:to_date], size: 10 %>
-        </td>
-      </tr>
-    </table>
+<%= form_tag({ controller: 'login_audit', action: 'index' }, method: :get, id: 'query_form') do %>
+  <fieldset id="filters" class="collapsible <%= @query.new_record? ? '' : 'collapsed' %>">
+    <legend onclick="toggleFieldset(this);" class="icon icon-collapsed">
+      <%= sprite_icon('angle-right') if respond_to?(:sprite_icon) %>
+      <%= l(:label_filter_plural) %>
+    </legend>
+    <div style="<%= @query.new_record? ? '' : 'display: none;' %>">
+      <%= render partial: 'queries/filters', locals: { query: @query } %>
+    </div>
+  </fieldset>
     
-    <p class="buttons hide-when-print">
-      <%= link_to l(:button_apply), '#', onclick: "$('#login_audit_filter_form').submit(); return false;", class: 'icon icon-checked' %>
-      <%= link_to l(:button_clear), {action: 'index'}, class: 'icon icon-reload' %>
-    </p>
-  </div>
-</fieldset>
+  <p class="buttons hide-when-print">
+    <%= link_to l(:button_apply), '#',
+                onclick: "$('#query_form').submit(); return false;",
+                class: 'icon icon-checked' %>
+    <%= link_to l(:button_clear),
+                { controller: 'login_audit', action: 'index' },
+                class: 'icon icon-reload' %>
+  </p>
 <% end %>
 
 <p class="subtitle"><%= l(:label_total) %>: <%= @audit_count %></p>
@@ -84,11 +64,19 @@
 <% if @audit_count > 0 %>
 <div class="contextual">
   <%= link_to l(:button_export_csv), {action: 'export', format: 'csv'}.merge(request.query_parameters), class: 'icon icon-export' %>
+  <%= link_to l(:label_stats), { action: 'stats' }.merge(request.query_parameters), class: 'icon icon-stats' %>
 </div>
+
 <% end %>
 
 <fieldset class="collapsible collapsed box">
-  <legend onclick="toggleFieldset(this);" class="icon icon-collapsed"><%= l(:label_purge_logs) %></legend>
+  <legend onclick="toggleFieldset(this);" class="icon icon-collapsed">
+    <% if respond_to?(:sprite_icon) %>
+      <%= sprite_icon("angle-right", rtl: true) %>
+      <%= sprite_icon("warning") %>
+    <% end %>
+    <%= l(:label_purge_logs) %>
+  </legend>
   <div style="display: none;">
 
     <% if @oldest_audit %>

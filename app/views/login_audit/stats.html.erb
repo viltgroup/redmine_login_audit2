@@ -1,0 +1,66 @@
+<h2><%= l(:label_login_audit) %> - <%= l(:label_stats) %></h2>
+<div class="contextual">
+  <%= link_to l(:label_login_audit), { action: 'index' }.merge(request.query_parameters), class: 'icon icon-list' %>
+</div>
+<p class="subtitle">
+  <%= l(:label_stats_period) %>:
+  <% if @from_date && @to_date %>
+    <strong><%= format_date(@from_date) %></strong> 〜 <strong><%= format_date(@to_date) %></strong>
+  <% else %>
+    <%= l(:label_stats_no_data) %>
+  <% end %>
+</p>
+<div class="stats-section">
+  <h3><%= l(:label_stats_ratio) %></h3>
+  <div class="stats-grid">
+    <div class="pie-box">
+      <h4><%= l(:label_stats_success_failure) %></h4>
+      <%= pie_chart([
+        { value: @success_count, color: '#4caf50', label: l(:general_text_Yes) },
+        { value: @failure_count, color: '#f44336', label: l(:general_text_No) }
+      ]) %>
+    </div>
+    <div class="pie-box">
+      <h4><%= l(:label_stats_api_web) %></h4>
+      <%= pie_chart([
+        { value: @api_count, color: '#1565c0', label: 'API' },
+        { value: @web_count, color: '#2e7d32', label: 'Web' }
+      ]) %>
+    </div>
+  </div>
+</div>
+
+<div class="stats-section">
+  <h3><%= l(:label_stats_daily) %></h3>
+  <div class="bar-chart">
+    <% 30.downto(0) do |i| %>
+      <% date = i.days.ago.to_date %>
+      <% s = @daily_counts[[date.to_s, true]] || 0 %>
+      <% f = @daily_counts[[date.to_s, false]] || 0 %>
+      <% next if s == 0 && f == 0 %>
+      <% max = (@daily_max ||= @daily_counts.values.max || 1) %>
+      <!-- 積み上げは bar_row 2つ並べるより専用ヘルパーの方が良いかも -->
+      <%= bar_row(date.strftime('%m/%d'), s + f, max, s > 0 ? 'bar-success' : 'bar-failure') %>
+    <% end %>
+  </div>
+</div>
+
+<div class="stats-section">
+  <h3><%= l(:label_stats_top_failure_ips) %></h3>
+  <div class="bar-chart">
+    <% max_ip = @top_failure_ips.values.max || 1 %>
+    <% @top_failure_ips.each do |ip, count| %>
+      <%= bar_row(ip, count, max_ip, 'bar-failure') %>
+    <% end %>
+  </div>
+</div>
+
+<div class="stats-section">
+  <h3><%= l(:label_stats_top_failure_logins) %></h3>
+  <div class="bar-chart">
+    <% max_login = @top_failure_logins.values.max || 1 %>
+    <% @top_failure_logins.each do |login, count| %>
+      <%= bar_row(h(login), count, max_login, 'bar-failure') %>
+    <% end %>
+  </div>
+</div>

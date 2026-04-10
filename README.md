@@ -1,8 +1,8 @@
 # Redmine Login Audit 2
 
-A login audit plugin for Redmine 6.x.
+A login audit plugin for Redmine 6.x and 7.0.
 
-This is a refactored version of the original [redmine_login_audit](https://github.com/martin-denizet/redmine_login_audit) by Martin Denizet, updated for Redmine 6.x / Rails 7.2.
+This is a refactored version of the original [redmine_login_audit](https://github.com/martin-denizet/redmine_login_audit) by Martin Denizet, updated for Redmine 6.x / 7.0.
 
 ## Features
 
@@ -15,8 +15,6 @@ This is a refactored version of the original [redmine_login_audit](https://githu
 ## Requirements
 
 - Redmine 6.0 or higher
-- Ruby 3.2 or higher
-- Rails 7.2
 
 ## Installation
 
@@ -60,13 +58,14 @@ bundle exec rake redmine_login_audit2:cleanup_v1 RAILS_ENV=production
 
 ### Available Rake Tasks
 
-| Task | Description |
-|------|-------------|
-| `redmine_login_audit2:check` | Check current migration status |
-| `redmine_login_audit2:migrate_from_v1` | Migrate from old plugin |
-| `redmine_login_audit2:cleanup_v1` | Remove old migration records |
-| `redmine_login_audit2:stats` | Show statistics |
-| `redmine_login_audit2:purge MONTHS=6` | Delete old logs |
+
+| Task                                   | Description                    |
+| ---------------------------------------- | -------------------------------- |
+| `redmine_login_audit2:check`           | Check current migration status |
+| `redmine_login_audit2:migrate_from_v1` | Migrate from old plugin        |
+| `redmine_login_audit2:cleanup_v1`      | Remove old migration records   |
+| `redmine_login_audit2:stats`           | Show statistics                |
+| `redmine_login_audit2:purge MONTHS=6`  | Delete old logs                |
 
 ## Uninstall
 
@@ -80,12 +79,13 @@ rm -rf plugins/redmine_login_audit2
 
 Navigate to "Administration" → "Plugins" → "Redmine Login Audit 2" → "Configure":
 
-| Setting | Description |
-|---------|-------------|
+
+| Setting         | Description                                     |
+| ----------------- | ------------------------------------------------- |
 | Logging Setting | Nothing / Successes only / Failures only / Both |
-| Audit API | Also log REST API access |
-| Filter API Keys | Replace API keys in URL with [FILTERED] |
-| Rows per Page | Number of entries per page in admin view |
+| Audit API       | Also log REST API access                        |
+| Filter API Keys | Replace API keys in URL with [FILTERED]         |
+| Rows per Page   | Number of entries per page in admin view        |
 
 ## Usage
 
@@ -93,11 +93,16 @@ Access logs via "Administration" → "Login Audit".
 
 ### Filtering
 
-- Login ID
-- IP Address
-- Success / Failure
-- Web / API
-- Date range
+Filtering uses Redmine's standard filter UI. Add filters from the "Add filter"
+dropdown and combine them freely with operators (contains, is, starts with,
+date range, etc.):
+
+- Login ID / IP Address / Method / URL (text operators)
+- Success (yes / no)
+- Source (Web / API)
+- Created on (date operators: today, last N days, range, etc.)
+
+The current filter state carries over to the statistics page.
 
 ### Log Deletion
 
@@ -126,15 +131,20 @@ Access logs via "Administration" → "Login Audit".
 - **Delete All Protection**: Requires checkbox confirmation to prevent accidental deletion
 - **HTML5 Date Picker**: Native date input fields (no calendar helper dependency)
 
+## SAML Plugin Compatibility
+
+This plugin is compatible with [redmine_saml](https://github.com/alphanodes/redmine_saml). When a user is locked in Redmine but authenticates via SSO, the failed login attempt is properly recorded.
+
 ## Supported Authentication Methods
 
-| Method | Success | Failure | Notes |
-|--------|:-------:|:-------:|-------|
-| Redmine Standard Login | ✓ | ✓ | Built-in |
-| LDAP / Active Directory | ✓ | ✓ | Uses standard `try_to_login` |
-| REST API (key/basic auth) | ✓ | ✓ | Built-in |
-| SAML (redmine_saml) | ✓ | ✓ | Built-in |
-| Other OmniAuth plugins | ✓ | — | Success via hook; failure requires extension |
+
+| Method                    | Success | Failure | Notes                                        |
+| --------------------------- | :-------: | :-------: | ---------------------------------------------- |
+| Redmine Standard Login    |   ✓   |   ✓   | Built-in                                     |
+| LDAP / Active Directory   |   ✓   |   ✓   | Uses standard`try_to_login`                  |
+| REST API (key/basic auth) |   ✓   |   ✓   | Built-in                                     |
+| SAML (redmine_saml)       |   ✓   |   ✓   | Built-in                                     |
+| Other OmniAuth plugins    |   ✓   |   —   | Success via hook; failure requires extension |
 
 **Success logging** works automatically for all authentication methods via Redmine's `controller_account_success_authentication_after` hook.
 
@@ -148,13 +158,14 @@ If you use an OmniAuth-based authentication plugin not listed above, you can add
 
 Check your authentication plugin's source code for the callback method name. Common patterns:
 
-| Plugin | Callback Method |
-|--------|-----------------|
-| redmine_saml | `login_with_saml_callback` |
-| redmine_omniauth_google | `oauth_google_callback` |
-| redmine_omniauth_github | `oauth_github_callback` |
-| redmine_omniauth_azure | `oauth_azure_callback` |
-| redmine_openid_connect | `oic_callback` |
+
+| Plugin                  | Callback Method            |
+| ------------------------- | ---------------------------- |
+| redmine_saml            | `login_with_saml_callback` |
+| redmine_omniauth_google | `oauth_google_callback`    |
+| redmine_omniauth_github | `oauth_github_callback`    |
+| redmine_omniauth_azure  | `oauth_azure_callback`     |
+| redmine_openid_connect  | `oic_callback`             |
 
 ### Step 2: Add the Override
 
@@ -224,9 +235,31 @@ If failure logging doesn't work:
 3. **Enable debug logging** — Add `Rails.logger.debug` statements to trace execution
 4. **Verify plugin load order** — This plugin should load after the auth plugin (alphabetical order usually works)
 
+## Changelog
+
+### v1.0.2 (2026-07-12)
+
+- Migrated filtering to Redmine core Query API: removed the custom filter logic in favor of the standard filter UI (operators, add/remove filters, multi-value)
+- Redmine 7.0 support; migrated menu and legend icons to SVG sprites (`sprite_icon`), with fallback for 6.x
+- Added statistics page: success/failure and API/Web ratios, daily trend, and top failure IPs/logins
+- Added HTTP Referer recording per login event
+- Fixed per_page not being respected on initial load
+- Added filter labels (source, date range) across all bundled locales
+
+### v1.0.0 (2025-04-10)
+
+- Initial release (refactored from redmine_login_audit)
+- Redmine 6.x / Rails 7.2 support
+- Web login and API access logging
+- SAML/SSO failure logging (redmine_saml compatible)
+- Streaming CSV export with batch processing
+- Improved purge UI with oldest log date display
+- Delete all protection with checkbox confirmation
+- HTML5 native date picker for filters
+
 ## License
 
-MIT License
+GNU General Public License v2.0
 
 ## Credits
 

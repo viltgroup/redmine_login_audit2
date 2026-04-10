@@ -41,4 +41,44 @@ module LoginAuditHelper
       ['Web', '0']
     ]
   end
+
+  # 横棒グラフ1行分
+  def bar_row(label, value, max_value, color_class = 'bar-success')
+    pct = max_value > 0 ? (value.to_f / max_value * 100).round(1) : 0
+    content_tag(:div, class: 'bar-row') do
+      content_tag(:span, label, class: 'bar-label') +
+      content_tag(:div, class: 'bar-track') do
+        content_tag(:div, value.to_s, class: "bar-fill #{color_class}",
+                    style: "width: #{pct}%")
+      end
+    end
+  end
+
+  # 円グラフ（conic-gradient）
+  def pie_chart(slices)
+    # slices = [{ value: 72, color: '#4caf50', label: '成功' }, ...]
+    total = slices.sum { |s| s[:value] }
+    return content_tag(:div, '-', class: 'pie-empty') if total == 0
+
+    cumulative = 0
+    stops = slices.map do |s|
+      pct = (s[:value].to_f / total * 100).round(2)
+      from = cumulative
+      cumulative += pct
+      "#{s[:color]} #{from}% #{cumulative}%"
+    end
+
+    content_tag(:div, '', class: 'pie-chart',
+                style: "background: conic-gradient(#{stops.join(', ')})") +
+    content_tag(:ul, class: 'pie-legend') do
+      safe_join(slices.map { |s|
+        pct = (s[:value].to_f / total * 100).round(1)
+        content_tag(:li) do
+          content_tag(:span, '', class: 'legend-color',
+                      style: "background: #{s[:color]}") +
+          " #{s[:label]}: #{s[:value]} (#{pct}%)"
+        end
+      })
+    end
+  end
 end

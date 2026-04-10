@@ -16,6 +16,11 @@ de:
   field_source: Quelle
   field_method: Methode
   field_url: URL
+  field_api: Quelle
+  label_source_web: Web
+  label_source_api: API
+  label_date_from: Von
+  label_date_to: Bis
 
   # Settings
   setting_log_setting: Protokollierungseinstellung

@@ -16,6 +16,11 @@ zh:
   field_source: 来源
   field_method: 方法
   field_url: URL
+  field_api: 来源
+  label_source_web: 网页
+  label_source_api: API
+  label_date_from: 从
+  label_date_to: 到
 
   # Settings
   setting_log_setting: 日志设置
