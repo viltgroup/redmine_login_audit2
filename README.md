@@ -126,11 +126,6 @@ Access logs via "Administration" → "Login Audit".
 - **Delete All Protection**: Requires checkbox confirmation to prevent accidental deletion
 - **HTML5 Date Picker**: Native date input fields (no calendar helper dependency)
 
-## SAML Plugin Compatibility
-
-This plugin is compatible with [redmine_saml](https://github.com/alphanodes/redmine_saml). When a user is locked in Redmine but authenticates via SSO, the failed login attempt is properly recorded.
-
-
 ## Supported Authentication Methods
 
 | Method | Success | Failure | Notes |
@@ -228,9 +223,10 @@ If failure logging doesn't work:
 2. **Check if `find_or_create_from_omniauth` exists** — Some plugins use different methods like `find_by_provider_and_uid`
 3. **Enable debug logging** — Add `Rails.logger.debug` statements to trace execution
 4. **Verify plugin load order** — This plugin should load after the auth plugin (alphabetical order usually works)
+
 ## License
 
-GNU General Public License v2.0
+MIT License
 
 ## Credits
 

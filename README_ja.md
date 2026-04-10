@@ -184,7 +184,7 @@ end
 
 ## ライセンス
 
-GNU General Public License v2.0
+MIT License
 
 ## クレジット
 
