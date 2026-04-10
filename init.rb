@@ -3,7 +3,7 @@
 # Redmine Login Audit 2
 #
 # Copyright (c) 2015-2018 Martin Denizet
-# Copyright (c) 2024 seraph3000
+# Copyright (c) 2026 seraph3000
 #
 # Released under the MIT License.
 # See LICENSE file for details.
