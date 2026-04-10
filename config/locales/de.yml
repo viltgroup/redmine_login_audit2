@@ -1,0 +1,52 @@
+de:
+  # Menu & Labels
+  label_login_audit: Login-Überwachung
+  label_purge_logs: Alte Protokolle löschen
+  label_purge_older_than: "Aufbewahrungszeitraum:"
+  button_purge_old_logs: "Alte Protokolle löschen"
+  label_oldest_log_date: "Ältester vorhandener Eintrag"
+  label_unknown_user: Unbekannter Benutzer
+  label_x_months:
+    one: "%{count} Monat"
+    other: "%{count} Monate"
+
+  # Fields
+  field_ip_address: IP-Adresse
+  field_success: Erfolg
+  field_source: Quelle
+  field_method: Methode
+  field_url: URL
+
+  # Settings
+  setting_log_setting: Protokollierungseinstellung
+  setting_audit_api: API überwachen
+  setting_audit_api_filter_out_keys: API-Schlüssel filtern
+  setting_audit_rows_per_page: Einträge pro Seite
+
+  info_log_setting: Wählen Sie aus, welche Ereignisse protokolliert werden sollen
+  info_audit_api: Auch API-Zugriffe protokollieren
+  info_audit_api_filter_out_keys: API-Schlüssel in URL durch [FILTERED] ersetzen
+  info_audit_rows_per_page: Anzahl der Protokolleinträge pro Seite
+
+  # Logging setting options
+  settings:
+    logging:
+      nothing: Nichts
+      successes: Nur Erfolge
+      failures: Nur Fehlschläge
+      both: Beides
+
+  # Notices & Errors
+  notice_la_records_deleted: "%{count} Protokolleinträge älter als %{date} gelöscht"
+  notice_la_records_all_deleted: "Alle %{count} Protokolleinträge gelöscht"
+  error_la_bad_parameters: Ungültige Parameter
+
+  # Buttons
+  button_delete_all: Alle löschen
+  button_export_csv: CSV exportieren
+
+  # Warning
+  warning_delete_all: Alle Protokolle werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.
+
+  # Permissions (for future use)
+  permission_view_login_audit: Login-Überwachung anzeigen

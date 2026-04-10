@@ -1,0 +1,52 @@
+fr:
+  # Menu & Labels
+  label_login_audit: Audit des connexions
+  label_purge_logs: Purger les anciens journaux
+  label_purge_older_than: "Période de rétention :"
+  button_purge_old_logs: "Supprimer les anciens journaux"
+  label_oldest_log_date: "Plus ancien journal existant"
+  label_unknown_user: Utilisateur inconnu
+  label_x_months:
+    one: "%{count} mois"
+    other: "%{count} mois"
+
+  # Fields
+  field_ip_address: Adresse IP
+  field_success: Succès
+  field_source: Source
+  field_method: Méthode
+  field_url: URL
+
+  # Settings
+  setting_log_setting: Paramètres de journalisation
+  setting_audit_api: Auditer l'API
+  setting_audit_api_filter_out_keys: Filtrer les clés API
+  setting_audit_rows_per_page: Lignes par page
+
+  info_log_setting: Sélectionnez les événements à journaliser
+  info_audit_api: Journaliser également les accès API
+  info_audit_api_filter_out_keys: Remplacer les clés API dans l'URL par [FILTERED]
+  info_audit_rows_per_page: Nombre d'entrées par page
+
+  # Logging setting options
+  settings:
+    logging:
+      nothing: Rien
+      successes: Succès uniquement
+      failures: Échecs uniquement
+      both: Les deux
+
+  # Notices & Errors
+  notice_la_records_deleted: "%{count} entrées antérieures à %{date} supprimées"
+  notice_la_records_all_deleted: "Toutes les %{count} entrées supprimées"
+  error_la_bad_parameters: Paramètres invalides
+
+  # Buttons
+  button_delete_all: Tout supprimer
+  button_export_csv: Exporter en CSV
+
+  # Warning
+  warning_delete_all: Tous les journaux seront supprimés. Cette action est irréversible.
+
+  # Permissions (for future use)
+  permission_view_login_audit: Voir l'audit des connexions

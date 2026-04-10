@@ -1,0 +1,143 @@
+/* Login Audit Plugin Styles */
+
+/* ログ一覧テーブル */
+table.login-audits {
+  width: 100%;
+}
+
+table.login-audits td.created_on {
+  white-space: nowrap;
+  width: 140px;
+}
+
+table.login-audits td.login {
+  width: 120px;
+}
+
+table.login-audits td.user {
+  width: 150px;
+}
+
+table.login-audits td.ip_address {
+  width: 120px;
+  font-family: monospace;
+}
+
+table.login-audits td.success {
+  width: 60px;
+  text-align: center;
+}
+
+table.login-audits td.source {
+  width: 60px;
+  text-align: center;
+}
+
+table.login-audits td.method {
+  width: 60px;
+  text-align: center;
+  font-family: monospace;
+}
+
+table.login-audits td.url {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+/* 成功/失敗の行色分け */
+table.login-audits tr.failure td {
+  background-color: #fff0f0;
+}
+
+table.login-audits tr.failure:hover td {
+  background-color: #ffe0e0;
+}
+
+/* 不明ユーザー表示 */
+span.unknown-user {
+  color: #999;
+  font-style: italic;
+}
+
+/* バッジ */
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 0.85em;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.badge-api {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.badge-web {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* 成功/失敗アイコン */
+.icon-checked {
+  color: #4caf50;
+}
+
+.icon-not-checked {
+  color: #f44336;
+}
+
+/* フィルター */
+table.login-audit-filters {
+  width: 100%;
+}
+
+table.login-audit-filters td.field {
+  padding: 3px 10px 3px 0;
+  vertical-align: middle;
+}
+
+table.login-audit-filters td.buttons {
+  text-align: right;
+}
+
+/* 危険ボタン */
+input.danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+input.danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+/* 無効化（非活性）時のスタイル */
+input.danger:disabled {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 警告テキスト */
+span.warning {
+  color: #dc3545;
+  font-size: 0.9em;
+  margin-left: 10px;
+}
+
+/* パージ用フィールドセット */
+fieldset.box {
+  margin-top: 20px;
+}
+
+fieldset.box p {
+  margin: 10px 0;
+}

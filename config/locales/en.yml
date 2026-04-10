@@ -1,0 +1,52 @@
+en:
+  # Menu & Labels
+  label_login_audit: Login Audit
+  label_purge_logs: Purge Old Logs
+  label_purge_older_than: "Log retention period:"
+  button_purge_old_logs: "Delete old logs"
+  label_oldest_log_date: "Oldest existing log"
+  label_unknown_user: Unknown User
+  label_x_months:
+    one: "%{count} month"
+    other: "%{count} months"
+
+  # Fields
+  field_ip_address: IP Address
+  field_success: Success
+  field_source: Source
+  field_method: Method
+  field_url: URL
+
+  # Settings
+  setting_log_setting: Logging Setting
+  setting_audit_api: Audit API
+  setting_audit_api_filter_out_keys: Filter API Keys
+  setting_audit_rows_per_page: Rows per Page
+
+  info_log_setting: Select which events to log
+  info_audit_api: Also log API access
+  info_audit_api_filter_out_keys: Replace API keys in URL with [FILTERED]
+  info_audit_rows_per_page: Number of log entries to display per page
+
+  # Logging setting options
+  settings:
+    logging:
+      nothing: Nothing
+      successes: Successes only
+      failures: Failures only
+      both: Both
+
+  # Notices & Errors
+  notice_la_records_deleted: "Deleted %{count} log entries older than %{date}"
+  notice_la_records_all_deleted: "Deleted all %{count} log entries"
+  error_la_bad_parameters: Invalid parameters
+
+  # Buttons
+  button_delete_all: Delete All
+  button_export_csv: Export CSV
+
+  # Warning
+  warning_delete_all: This will delete all logs. This action cannot be undone.
+
+  # Permissions (for future use)
+  permission_view_login_audit: View login audit

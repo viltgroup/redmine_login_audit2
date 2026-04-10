@@ -1,0 +1,52 @@
+zh:
+  # Menu & Labels
+  label_login_audit: 登录审计
+  label_purge_logs: 清除旧日志
+  label_purge_older_than: "保留期限："
+  button_purge_old_logs: "删除旧日志"
+  label_oldest_log_date: "最早的日志记录"
+  label_unknown_user: 未知用户
+  label_x_months:
+    one: "%{count} 个月"
+    other: "%{count} 个月"
+
+  # Fields
+  field_ip_address: IP地址
+  field_success: 成功
+  field_source: 来源
+  field_method: 方法
+  field_url: URL
+
+  # Settings
+  setting_log_setting: 日志设置
+  setting_audit_api: 审计API
+  setting_audit_api_filter_out_keys: 过滤API密钥
+  setting_audit_rows_per_page: 每页行数
+
+  info_log_setting: 选择要记录的事件
+  info_audit_api: 同时记录API访问
+  info_audit_api_filter_out_keys: 将URL中的API密钥替换为[FILTERED]
+  info_audit_rows_per_page: 每页显示的日志条目数
+
+  # Logging setting options
+  settings:
+    logging:
+      nothing: 不记录
+      successes: 仅成功
+      failures: 仅失败
+      both: 全部
+
+  # Notices & Errors
+  notice_la_records_deleted: "已删除 %{date} 之前的 %{count} 条日志"
+  notice_la_records_all_deleted: "已删除全部 %{count} 条日志"
+  error_la_bad_parameters: 参数无效
+
+  # Buttons
+  button_delete_all: 全部删除
+  button_export_csv: 导出CSV
+
+  # Warning
+  warning_delete_all: 所有日志将被删除。此操作无法撤消。
+
+  # Permissions (for future use)
+  permission_view_login_audit: 查看登录审计

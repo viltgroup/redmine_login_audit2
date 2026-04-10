@@ -1,0 +1,27 @@
+<div class="tabular settings">
+  <p>
+    <label><%= l(:setting_log_setting) %></label>
+    <%= select_tag 'settings[log_setting]', options_for_select(LoginAudit::LoggingSetting.to_dropdown, @settings['log_setting'].to_i) %>
+    <em class="info"><%= l(:info_log_setting) %></em>
+  </p>
+
+  <p>
+    <label><%= l(:setting_audit_api) %></label>
+    <%= hidden_field_tag 'settings[audit_api]', '0', id: nil %>
+    <%= check_box_tag 'settings[audit_api]', '1', @settings['audit_api'] == '1' %>
+    <em class="info"><%= l(:info_audit_api) %></em>
+  </p>
+
+  <p>
+    <label><%= l(:setting_audit_api_filter_out_keys) %></label>
+    <%= hidden_field_tag 'settings[audit_api_filter_out_keys]', '0', id: nil %>
+    <%= check_box_tag 'settings[audit_api_filter_out_keys]', '1', @settings['audit_api_filter_out_keys'] == '1' %>
+    <em class="info"><%= l(:info_audit_api_filter_out_keys) %></em>
+  </p>
+
+  <p>
+    <label><%= l(:setting_audit_rows_per_page) %></label>
+    <%= text_field_tag 'settings[audit_rows_per_page]', @settings['audit_rows_per_page'], size: 5 %>
+    <em class="info"><%= l(:info_audit_rows_per_page) %></em>
+  </p>
+</div>

@@ -1,0 +1,52 @@
+ko:
+  # Menu & Labels
+  label_login_audit: 로그인 감사
+  label_purge_logs: 오래된 로그 삭제
+  label_purge_older_than: "보존 기간:"
+  button_purge_old_logs: "오래된 로그 삭제"
+  label_oldest_log_date: "가장 오래된 로그"
+  label_unknown_user: 알 수 없는 사용자
+  label_x_months:
+    one: "%{count}개월"
+    other: "%{count}개월"
+
+  # Fields
+  field_ip_address: IP 주소
+  field_success: 성공
+  field_source: 소스
+  field_method: 메소드
+  field_url: URL
+
+  # Settings
+  setting_log_setting: 로깅 설정
+  setting_audit_api: API 감사
+  setting_audit_api_filter_out_keys: API 키 필터링
+  setting_audit_rows_per_page: 페이지당 행 수
+
+  info_log_setting: 기록할 이벤트를 선택하세요
+  info_audit_api: API 접근도 기록
+  info_audit_api_filter_out_keys: URL의 API 키를 [FILTERED]로 대체
+  info_audit_rows_per_page: 페이지당 표시할 항목 수
+
+  # Logging setting options
+  settings:
+    logging:
+      nothing: 없음
+      successes: 성공만
+      failures: 실패만
+      both: 모두
+
+  # Notices & Errors
+  notice_la_records_deleted: "%{date} 이전의 %{count}개 로그를 삭제했습니다"
+  notice_la_records_all_deleted: "모든 %{count}개 로그를 삭제했습니다"
+  error_la_bad_parameters: 잘못된 매개변수
+
+  # Buttons
+  button_delete_all: 모두 삭제
+  button_export_csv: CSV 내보내기
+
+  # Warning
+  warning_delete_all: 모든 로그가 삭제됩니다. 이 작업은 취소할 수 없습니다.
+
+  # Permissions (for future use)
+  permission_view_login_audit: 로그인 감사 보기

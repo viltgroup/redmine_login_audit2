@@ -1,0 +1,147 @@
+<h2><%= l(:label_login_audit) %></h2>
+
+<%= form_tag({action: 'index'}, method: :get, id: 'login_audit_filter_form') do %>
+<fieldset id="filters" class="collapsible collapsed">
+  <legend onclick="toggleFieldset(this);" class="icon icon-collapsed"><%= l(:label_filter_plural) %></legend>
+  <div style="display: none;">
+    <table class="login-audit-filters">
+      <tr>
+        <td class="field">
+          <label for="login"><%= l(:field_login) %>:</label>
+          <%= text_field_tag 'login', params[:login], size: 20 %>
+        </td>
+        <td class="field">
+          <label for="ip_address"><%= l(:field_ip_address) %>:</label>
+          <%= text_field_tag 'ip_address', params[:ip_address], size: 20 %>
+        </td>
+        <td class="field">
+          <label for="success"><%= l(:field_success) %>:</label>
+          <%= select_tag 'success', options_for_select(options_for_success_filter, params[:success]) %>
+        </td>
+        <td class="field">
+          <label for="api"><%= l(:field_source) %>:</label>
+          <%= select_tag 'api', options_for_select(options_for_api_filter, params[:api]) %>
+        </td>
+        <td class="field" colspan="4">
+          <label for="from_date"><%= l(:label_date_from) %>:</label>
+          <%= date_field_tag 'from_date', params[:from_date], size: 10 %>
+          <span style="margin: 0 10px;">〜</span>
+          <label for="to_date"><%= l(:label_date_to) %>:</label>
+          <%= date_field_tag 'to_date', params[:to_date], size: 10 %>
+        </td>
+      </tr>
+    </table>
+    
+    <p class="buttons hide-when-print">
+      <%= link_to l(:button_apply), '#', onclick: "$('#login_audit_filter_form').submit(); return false;", class: 'icon icon-checked' %>
+      <%= link_to l(:button_clear), {action: 'index'}, class: 'icon icon-reload' %>
+    </p>
+  </div>
+</fieldset>
+<% end %>
+
+<p class="subtitle"><%= l(:label_total) %>: <%= @audit_count %></p>
+
+<div class="autoscroll">
+<table class="list login-audits">
+  <thead>
+    <tr>
+      <%= sort_header_tag('created_on', caption: l(:field_created_on)) %>
+      <%= sort_header_tag('login', caption: l(:field_login)) %>
+      <th><%= l(:field_user) %></th>
+      <%= sort_header_tag('ip_address', caption: l(:field_ip_address)) %>
+      <%= sort_header_tag('success', caption: l(:field_success)) %>
+      <%= sort_header_tag('api', caption: l(:field_source)) %>
+      <%= sort_header_tag('method', caption: l(:field_method)) %>
+      <th><%= l(:field_url) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @audits.each do |audit| %>
+    <tr class="<%= cycle('odd', 'even') %> <%= audit.success? ? 'success' : 'failure' %>">
+      <td class="created_on"><%= format_time(audit.created_on) %></td>
+      <td class="login"><%= h audit.login %></td>
+      <td class="user">
+        <% if audit.user %>
+          <%= link_to_user(audit.user) %>
+        <% else %>
+          <span class="unknown-user"><%= l(:label_unknown_user) %></span>
+        <% end %>
+      </td>
+      <td class="ip_address"><%= h audit.ip_address %></td>
+      <td class="success"><%= success_icon(audit.success?) %></td>
+      <td class="source"><%= source_label(audit) %></td>
+      <td class="method"><%= h audit.method %></td>
+      <td class="url" title="<%= h audit.url %>"><%= truncate(audit.url, length: 50) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
+<span class="pagination"><%= pagination_links_full @audit_pages, @audit_count %></span>
+
+<% if @audit_count > 0 %>
+<div class="contextual">
+  <%= link_to l(:button_export_csv), {action: 'export', format: 'csv'}.merge(request.query_parameters), class: 'icon icon-export' %>
+</div>
+<% end %>
+
+<fieldset class="collapsible collapsed box">
+  <legend onclick="toggleFieldset(this);" class="icon icon-collapsed"><%= l(:label_purge_logs) %></legend>
+  <div style="display: none;">
+
+    <% if @oldest_audit %>
+      <p class="info" style="margin-bottom: 15px;">
+        <span class="icon icon-info"></span>
+        <%= l(:label_oldest_log_date) %>: <strong><%= format_time(@oldest_audit.created_on) %></strong>
+      </p>
+    <% end %>
+
+<%= form_tag({action: 'delete'}, method: :post) do %>
+      <p>
+        <%= l(:label_purge_older_than) %>
+        <%= select_tag 'purge_offset', options_for_select(choices_for_purge, 6) %>
+        <%= submit_tag l(:button_purge_old_logs), data: {confirm: l(:text_are_you_sure)}, class: 'button' %>
+      </p>
+    <% end %>
+
+<%= form_tag({action: 'delete_all'}, method: :post) do %>
+      <p>
+        <%= submit_tag l(:button_delete_all),
+                       data: {confirm: l(:text_are_you_sure)},
+                       class: 'button danger',
+                       id: 'btn_delete_all',
+                       disabled: true %>
+        <label class="warning" for="chk_confirm_delete_all" style="cursor: pointer; margin-left: 10px;">
+          <%= check_box_tag 'confirm', '1', false, id: 'chk_confirm_delete_all' %>
+          <%= l(:warning_delete_all) %>
+        </label>
+      </p>
+    <% end %>
+  </div>
+</fieldset>
+
+<%= javascript_tag do %>
+  // Redmine(Turbo/Turbolinks環境)も考慮した書き方
+  const setupDeleteAllToggle = function() {
+    const checkbox = document.getElementById('chk_confirm_delete_all');
+    const button = document.getElementById('btn_delete_all');
+
+    if (checkbox && button) {
+      // 状態を同期する関数
+      const syncButtonState = function() {
+        button.disabled = !checkbox.checked;
+      };
+
+      // チェックボックス操作時に実行
+      checkbox.addEventListener('change', syncButtonState);
+      
+      // ページ読み込み時にも即座に実行（リロード対策）
+      syncButtonState();
+    }
+  };
+
+  // 即時実行
+  setupDeleteAllToggle();
+<% end %>

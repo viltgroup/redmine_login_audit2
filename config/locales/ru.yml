@@ -1,0 +1,54 @@
+ru:
+  # Menu & Labels
+  label_login_audit: Аудит входа
+  label_purge_logs: Очистить старые журналы
+  label_purge_older_than: "Период хранения:"
+  button_purge_old_logs: "Удалить старые журналы"
+  label_oldest_log_date: "Самая старая запись"
+  label_unknown_user: Неизвестный пользователь
+  label_x_months:
+    one: "%{count} месяц"
+    few: "%{count} месяца"
+    many: "%{count} месяцев"
+    other: "%{count} месяцев"
+
+  # Fields
+  field_ip_address: IP-адрес
+  field_success: Успех
+  field_source: Источник
+  field_method: Метод
+  field_url: URL
+
+  # Settings
+  setting_log_setting: Настройки журналирования
+  setting_audit_api: Аудит API
+  setting_audit_api_filter_out_keys: Фильтровать ключи API
+  setting_audit_rows_per_page: Записей на странице
+
+  info_log_setting: Выберите какие события записывать
+  info_audit_api: Также записывать доступ через API
+  info_audit_api_filter_out_keys: Заменять ключи API в URL на [FILTERED]
+  info_audit_rows_per_page: Количество записей на странице
+
+  # Logging setting options
+  settings:
+    logging:
+      nothing: Ничего
+      successes: Только успешные
+      failures: Только неудачные
+      both: Все
+
+  # Notices & Errors
+  notice_la_records_deleted: "Удалено %{count} записей старше %{date}"
+  notice_la_records_all_deleted: "Удалено все %{count} записей"
+  error_la_bad_parameters: Неверные параметры
+
+  # Buttons
+  button_delete_all: Удалить все
+  button_export_csv: Экспорт в CSV
+
+  # Warning
+  warning_delete_all: Все журналы будут удалены. Это действие нельзя отменить.
+
+  # Permissions (for future use)
+  permission_view_login_audit: Просмотр аудита входа

@@ -1,0 +1,52 @@
+ja:
+  # メニュー・ラベル
+  label_login_audit: ログイン監査
+  label_purge_logs: 古いログの削除
+  label_purge_older_than: "ログの保存期間:"
+  button_purge_old_logs: "古いログを削除"
+  label_oldest_log_date: "現在の最も古いログ"
+  label_unknown_user: 不明なユーザー
+  label_x_months:
+    one: "%{count}ヶ月"
+    other: "%{count}ヶ月"
+
+  # フィールド
+  field_ip_address: IPアドレス
+  field_success: 成功
+  field_source: ソース
+  field_method: メソッド
+  field_url: URL
+
+  # 設定
+  setting_log_setting: ログ記録設定
+  setting_audit_api: API監査
+  setting_audit_api_filter_out_keys: APIキーをフィルタ
+  setting_audit_rows_per_page: 1ページの表示件数
+
+  info_log_setting: どのイベントを記録するか選択します
+  info_audit_api: API経由のアクセスも記録する
+  info_audit_api_filter_out_keys: URLに含まれるAPIキーを[FILTERED]に置換する
+  info_audit_rows_per_page: 管理画面で1ページに表示するログの件数
+
+  # ログ設定の選択肢
+  settings:
+    logging:
+      nothing: 記録しない
+      successes: 成功のみ
+      failures: 失敗のみ
+      both: 両方
+
+  # 通知・エラー
+  notice_la_records_deleted: "%{date}より前の%{count}件のログを削除しました"
+  notice_la_records_all_deleted: "%{count}件のログをすべて削除しました"
+  error_la_bad_parameters: パラメータが不正です
+
+  # ボタン
+  button_delete_all: すべて削除
+  button_export_csv: CSVエクスポート
+
+  # 警告
+  warning_delete_all: すべてのログが削除されます。元に戻せません。
+
+  # 権限（将来用）
+  permission_view_login_audit: ログイン監査の閲覧
