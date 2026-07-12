@@ -2,22 +2,12 @@
 
 # Redmine Login Audit 2
 #
-<<<<<<< HEAD
 # Copyright (c) 2015-2018 Martin Denizet
 # Copyright (c) 2026 seraph3000
 #
 # Released under the MIT License.
 # See LICENSE file for details.
 #
-=======
-# Copyright (C) 2026 seraph3000
-# Based on redmine_login_audit by Martin Denizet
->>>>>>> 52e59ee (v1.0.2: Redmine 7.0 support; migrate filters to core Query API)
-# Original: https://github.com/martin-denizet/redmine_login_audit
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2.
-
 require File.dirname(__FILE__) + '/lib/redmine_login_audit2'
 
 Redmine::Plugin.register :redmine_login_audit2 do
