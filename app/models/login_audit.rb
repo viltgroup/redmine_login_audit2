@@ -3,9 +3,12 @@
 class LoginAudit < ActiveRecord::Base
   belongs_to :user, optional: true
 
-  before_create :filter_out_api_key
-  before_create :truncate_url
-  before_create :truncate_referer
+  # before_validation, not before_create: validations run first, so a URL longer than 255 characters (every OAuth
+  # callback) was rejected before it could be truncated, and the login went unrecorded
+  before_validation :filter_out_api_key
+  before_validation :filter_out_oauth_params
+  before_validation :truncate_url
+  before_validation :truncate_referer
 
   validates :ip_address, presence: true
   validates :login, length: { maximum: 255 }, allow_blank: true
@@ -53,13 +56,14 @@ class LoginAudit < ActiveRecord::Base
       created_on: Time.current
     )
 
-    Rails.logger.info "LoginAudit Event: #{audit}"
-
     begin
       audit.save!
       Rails.logger.info "LoginAudit: Saved for User:'#{login}', id: #{user_id}, Success: #{success}"
     rescue StandardError => e
       Rails.logger.error "LoginAudit: Failed to save for User:'#{login}', id: #{user_id}, Success: #{success}, Error: #{e.message}"
+    ensure
+      # Logged after the save, so the URL has been through the filters (API key, OAuth code)
+      Rails.logger.info "LoginAudit Event: #{audit}"
     end
   end
 
@@ -147,6 +151,15 @@ class LoginAudit < ActiveRecord::Base
     if referer
       self.referer = referer.sub(/key=[^&]+/, 'key=[FILTERED]')
     end
+  end
+
+  # An OAuth/OIDC callback carries the authorization code and the CSRF state. Both are single-use and already spent
+  # by the time this is written, but an audit trail has no use for them.
+  OAUTH_PARAMS = /([?&](?:code|state|session_state)=)[^&]+/
+
+  def filter_out_oauth_params
+    self.url = url.gsub(OAUTH_PARAMS, '\1[FILTERED]') if url
+    self.referer = referer.gsub(OAUTH_PARAMS, '\1[FILTERED]') if referer
   end
 
   def plugin_setting(key)

@@ -2,23 +2,9 @@
 
 module RedmineLoginAudit2
   module AccountControllerPatch
-    # ログイン失敗時のキャプチャ
-    # Redmineのpassword_authentication メソッドをオーバーライド
-    def password_authentication
-      user = User.try_to_login(params[:username], params[:password], false)
-
-      if user.nil?
-        # ログイン失敗
-        LoginAudit.failure(nil, request, params)
-        invalid_credentials
-      elsif user.new_record?
-        # 自己登録が必要な場合
-        onthefly_creation_failed(user, { login: user.login, auth_source_id: user.auth_source_id })
-      else
-        # ログイン成功（Hooksで記録されるので、ここでは処理しない）
-        successful_authentication(user)
-      end
-    end
+    # Core's password_authentication is left in charge: replacing it skipped two-factor authentication and the
+    # active check. Failures are recorded where core reports them instead, which also covers SSO plugins that report
+    # through the same methods (redmine_oauth does). Successes are recorded by the hook in hooks.rb.
 
     # SAMLコールバック用のオーバーライド（redmine_samlプラグイン対応）
     # ロックされたユーザーがSSO経由でログインしようとした場合の失敗を記録
@@ -59,6 +45,31 @@ module RedmineLoginAudit2
 
       LoginAudit.failure(nil, request, { username: params[:message] || 'saml_failure' })
       super
+    end
+
+    private
+
+    # Wrong login or password, or a user an SSO plugin could not match
+    def invalid_credentials
+      LoginAudit.failure(nil, request, params)
+      super
+    end
+
+    # Right credentials, but the account is locked or not activated yet
+    def account_locked(user, redirect_path = signin_path)
+      LoginAudit.failure(user, request, params) if login_attempt?
+      super
+    end
+
+    def account_pending(user, redirect_path = signin_path)
+      LoginAudit.failure(user, request, params) if login_attempt?
+      super
+    end
+
+    # Core also reaches account_locked and account_pending from password recovery and from a registration awaiting
+    # approval, which are not logins
+    def login_attempt?
+      %w[lost_password register].exclude?(action_name)
     end
   end
 end

@@ -144,6 +144,7 @@ This plugin is compatible with [redmine_saml](https://github.com/alphanodes/redm
 | LDAP / Active Directory   |   ✓   |   ✓   | Uses standard`try_to_login`                  |
 | REST API (key/basic auth) |   ✓   |   ✓   | Built-in                                     |
 | SAML (redmine_saml)       |   ✓   |   ✓   | Built-in                                     |
+| OAuth (redmine_oauth)     |   ✓   |   ✓   | Failures through core's `invalid_credentials`, `account_locked`, `account_pending`; a provider error before user lookup is not recorded |
 | Other OmniAuth plugins    |   ✓   |   —   | Success via hook; failure requires extension |
 
 **Success logging** works automatically for all authentication methods via Redmine's `controller_account_success_authentication_after` hook.
@@ -236,6 +237,12 @@ If failure logging doesn't work:
 4. **Verify plugin load order** — This plugin should load after the auth plugin (alphabetical order usually works)
 
 ## Changelog
+
+### Unreleased (VILT fork)
+
+- Security: no longer replaces core's `password_authentication`. The override skipped two-factor authentication, so an account with 2FA could log in with its password alone, and it did not check that the account was active. Failures are now recorded from core's `invalid_credentials`, `account_locked` and `account_pending`, which SSO plugins such as redmine_oauth also report through
+- Fixed logins with a URL over 255 characters (every OAuth callback) never being recorded: truncation ran in `before_create`, after the length validation had already rejected the row
+- OAuth callback parameters `code`, `state` and `session_state` are filtered out of the recorded URL and referer
 
 ### v1.0.2 (2026-07-12)
 
