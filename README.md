@@ -9,6 +9,7 @@ This is a refactored version of the original [redmine_login_audit](https://githu
 - **Web Login Logging**: Records successful and failed login attempts
 - **API Access Logging**: Tracks REST API authentication
 - **SAML/SSO Support**: Captures failed logins for locked users via SSO (e.g., Okta, KeyCloak)
+- **Failed Login Header**: Marks failed logins with `X-Login-Failed-Reason` so a load balancer can rate limit them
 - **Admin Interface**: View logs with filtering, sorting, and CSV export
 - **Log Purging**: Bulk deletion of old records with safety confirmation
 
@@ -131,6 +132,43 @@ The current filter state carries over to the statistics page.
 - **Delete All Protection**: Requires checkbox confirmation to prevent accidental deletion
 - **HTML5 Date Picker**: Native date input fields (no calendar helper dependency)
 
+## Failed Login Header
+
+Redmine has no brute force protection of its own. This plugin sets `X-Login-Failed-Reason` on every response whose
+login failed, so a load balancer in front of Redmine can count failures per source IP and block repeat offenders. The
+value names the reason; a successful login, or a request that presented no credentials, sends no header at all.
+
+
+| Reason        | Set when                                                                                     |
+| ------------- | -------------------------------------------------------------------------------------------- |
+| `credentials` | Wrong login or password on the login form, or in HTTP Basic auth on an API request           |
+| `locked`      | Right password on the login form, but the account is locked or not activated yet             |
+| `api_key`     | An API key (`key` parameter or `X-Redmine-API-Key` header) that matches no active user       |
+| `token`       | An OAuth bearer token that is unknown, expired or revoked                                    |
+
+Not flagged: SSO callbacks (the provider has already authenticated the person), and HTTP Basic requests with the right
+password that core refuses anyway (two-factor authentication active, password change required). HTTP Basic with the
+right password for a locked account reports `credentials`, because core gives no way to tell it apart.
+
+The header is always sent, whatever the audit settings. **Strip it at the load balancer**: `locked` tells the client that
+the password was right. With HAProxy:
+
+```haproxy
+backend st_login
+    stick-table type ip size 1m expire 30m peers <peers> store gpc0,gpc0_rate(10m)
+
+frontend https
+    acl internal  src 10.0.0.0/8
+    acl login_ish method POST
+    acl login_ish req.hdr(authorization) -m beg -i basic
+    http-request deny deny_status 429 if login_ish { src,table_gpc0_rate(st_login) gt 20 }
+
+    http-response track-sc0 src table st_login if { res.hdr(x-login-failed-reason) -m found }
+    http-response sc-inc-gpc0(0) if { res.hdr(x-login-failed-reason) -m str credentials locked }
+    http-response sc-inc-gpc0(0) if { res.hdr(x-login-failed-reason) -m str api_key token } !internal
+    http-response del-header x-login-failed-reason
+```
+
 ## SAML Plugin Compatibility
 
 This plugin is compatible with [redmine_saml](https://github.com/alphanodes/redmine_saml). When a user is locked in Redmine but authenticates via SSO, the failed login attempt is properly recorded.
@@ -240,6 +278,7 @@ If failure logging doesn't work:
 
 ### Unreleased (VILT fork)
 
+- Added the `X-Login-Failed-Reason` response header (`credentials`, `locked`, `api_key`, `token`) on failed logins, for rate limiting at the load balancer
 - Security: no longer replaces core's `password_authentication`. The override skipped two-factor authentication, so an account with 2FA could log in with its password alone, and it did not check that the account was active. Failures are now recorded from core's `invalid_credentials`, `account_locked` and `account_pending`, which SSO plugins such as redmine_oauth also report through
 - Fixed logins with a URL over 255 characters (every OAuth callback) never being recorded: truncation ran in `before_create`, after the length validation had already rejected the row
 - OAuth callback parameters `code`, `state` and `session_state` are filtered out of the recorded URL and referer

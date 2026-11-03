@@ -6,6 +6,13 @@ module RedmineLoginAudit2
     # active check. Failures are recorded where core reports them instead, which also covers SSO plugins that report
     # through the same methods (redmine_oauth does). Successes are recorded by the hook in hooks.rb.
 
+    # POST /login.json checks the password and only then fails to find a template. Left to the exception middleware,
+    # that 406 is a new response without X-Login-Failed-Reason, while success still redirects: a password oracle the
+    # load balancer could not count. Answering it here keeps the header
+    def self.prepended(base)
+      base.rescue_from(::ActionController::UnknownFormat) { head :not_acceptable }
+    end
+
     # SAMLコールバック用のオーバーライド（redmine_samlプラグイン対応）
     # ロックされたユーザーがSSO経由でログインしようとした場合の失敗を記録
     def login_with_saml_callback
@@ -52,17 +59,24 @@ module RedmineLoginAudit2
     # Wrong login or password, or a user an SSO plugin could not match
     def invalid_credentials
       LoginAudit.failure(nil, request, params)
+      flag_login_failure('credentials') if password_login?
       super
     end
 
     # Right credentials, but the account is locked or not activated yet
     def account_locked(user, redirect_path = signin_path)
-      LoginAudit.failure(user, request, params) if login_attempt?
+      if login_attempt?
+        LoginAudit.failure(user, request, params)
+        flag_login_failure('locked') if password_login?
+      end
       super
     end
 
     def account_pending(user, redirect_path = signin_path)
-      LoginAudit.failure(user, request, params) if login_attempt?
+      if login_attempt?
+        LoginAudit.failure(user, request, params)
+        flag_login_failure('locked') if password_login?
+      end
       super
     end
 
@@ -70,6 +84,12 @@ module RedmineLoginAudit2
     # approval, which are not logins
     def login_attempt?
       %w[lost_password register].exclude?(action_name)
+    end
+
+    # The login form. SSO plugins report through the same methods from their own callback actions, but whoever reaches
+    # those has already authenticated at the provider, so there is no password to guess and nothing to rate limit
+    def password_login?
+      action_name == 'login'
     end
   end
 end

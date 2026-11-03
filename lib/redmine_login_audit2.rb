@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module RedmineLoginAudit2
+  # Set on a response whose login failed, naming why. The load balancer counts these per source IP and must strip the
+  # header before the response leaves the edge
+  FAILED_LOGIN_HEADER = 'X-Login-Failed-Reason'
+
   class << self
     def setup
       # Load patches
