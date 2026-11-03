@@ -24,6 +24,7 @@ Redmine::Plugin.register :redmine_login_audit2 do
     'log_setting' => LoginAudit::LoggingSetting::BOTH,
     'audit_api' => '1',
     'audit_api_filter_out_keys' => '1',
+    'failed_login_header' => '1',
     'audit_rows_per_page' => '25'
   }, partial: 'settings/login_audit_settings'
 

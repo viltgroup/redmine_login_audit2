@@ -27,11 +27,13 @@ ja:
   setting_audit_api: API監査
   setting_audit_api_filter_out_keys: APIキーをフィルタ
   setting_audit_rows_per_page: 1ページの表示件数
+  setting_failed_login_header: "ログイン失敗ヘッダー"
 
   info_log_setting: どのイベントを記録するか選択します
   info_audit_api: API経由のアクセスも記録する
   info_audit_api_filter_out_keys: URLに含まれるAPIキーを[FILTERED]に置換する
   info_audit_rows_per_page: 管理画面で1ページに表示するログの件数
+  info_failed_login_header: "ログイン失敗時に X-Login-Failed-Reason を送信し、ロードバランサーでのレート制限に使う（ロードバランサーで削除すること）"
 
   # ログ設定の選択肢
   settings:

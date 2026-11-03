@@ -86,6 +86,7 @@ Navigate to "Administration" → "Plugins" → "Redmine Login Audit 2" → "Conf
 | Logging Setting | Nothing / Successes only / Failures only / Both |
 | Audit API       | Also log REST API access                        |
 | Filter API Keys | Replace API keys in URL with [FILTERED]         |
+| Failed Login Header | Send `X-Login-Failed-Reason` on failed logins (on by default, see below) |
 | Rows per Page   | Number of entries per page in admin view        |
 
 ## Usage
@@ -150,8 +151,9 @@ Not flagged: SSO callbacks (the provider has already authenticated the person), 
 password that core refuses anyway (two-factor authentication active, password change required). HTTP Basic with the
 right password for a locked account reports `credentials`, because core gives no way to tell it apart.
 
-The header is always sent, whatever the audit settings. **Strip it at the load balancer**: `locked` tells the client that
-the password was right. With HAProxy:
+The header is on by default, including on installs configured before the setting existed, and is independent of the
+audit settings: turn it off with **Failed Login Header** on the plugin's configuration page. **Strip it at the load
+balancer**: `locked` tells the client that the password was right. With HAProxy:
 
 ```haproxy
 backend st_login
@@ -278,7 +280,7 @@ If failure logging doesn't work:
 
 ### Unreleased (VILT fork)
 
-- Added the `X-Login-Failed-Reason` response header (`credentials`, `locked`, `api_key`, `token`) on failed logins, for rate limiting at the load balancer
+- Added the `X-Login-Failed-Reason` response header (`credentials`, `locked`, `api_key`, `token`) on failed logins, for rate limiting at the load balancer, switchable with the new **Failed Login Header** setting (on by default)
 - Security: no longer replaces core's `password_authentication`. The override skipped two-factor authentication, so an account with 2FA could log in with its password alone, and it did not check that the account was active. Failures are now recorded from core's `invalid_credentials`, `account_locked` and `account_pending`, which SSO plugins such as redmine_oauth also report through
 - Fixed logins with a URL over 255 characters (every OAuth callback) never being recorded: truncation ran in `before_create`, after the length validation had already rejected the row
 - OAuth callback parameters `code`, `state` and `session_state` are filtered out of the recorded URL and referer

@@ -20,6 +20,13 @@
   </p>
 
   <p>
+    <label><%= l(:setting_failed_login_header) %></label>
+    <%= hidden_field_tag 'settings[failed_login_header]', '0', id: nil %>
+    <%= check_box_tag 'settings[failed_login_header]', '1', RedmineLoginAudit2.failed_login_header_enabled? %>
+    <em class="info"><%= l(:info_failed_login_header) %></em>
+  </p>
+
+  <p>
     <label><%= l(:setting_audit_rows_per_page) %></label>
     <%= text_field_tag 'settings[audit_rows_per_page]', @settings['audit_rows_per_page'], size: 5 %>
     <em class="info"><%= l(:info_audit_rows_per_page) %></em>

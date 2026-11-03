@@ -29,6 +29,13 @@ module RedmineLoginAudit2
       end
     end
 
+    # Redmine applies plugin defaults only while no settings row exists, so an install configured before this
+    # setting existed has no value for it: absent means enabled
+    def failed_login_header_enabled?
+      settings = Setting.plugin_redmine_login_audit2
+      !settings.is_a?(Hash) || settings['failed_login_header'].to_s != '0'
+    end
+
     def saml_plugin_installed?
       Redmine::Plugin.installed?(:redmine_saml)
     rescue

@@ -27,11 +27,13 @@ it:
   setting_audit_api: Audit API
   setting_audit_api_filter_out_keys: Filtra chiavi API
   setting_audit_rows_per_page: Righe per pagina
+  setting_failed_login_header: "Header accesso fallito"
 
   info_log_setting: Seleziona quali eventi registrare
   info_audit_api: Registra anche gli accessi API
   info_audit_api_filter_out_keys: Sostituisci le chiavi API nell'URL con [FILTERED]
   info_audit_rows_per_page: Numero di voci per pagina
+  info_failed_login_header: "Invia X-Login-Failed-Reason sugli accessi falliti, per limitare la frequenza sul load balancer (rimuoverlo lì)"
 
   # Logging setting options
   settings:

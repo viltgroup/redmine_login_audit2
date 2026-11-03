@@ -27,11 +27,13 @@ de:
   setting_audit_api: API überwachen
   setting_audit_api_filter_out_keys: API-Schlüssel filtern
   setting_audit_rows_per_page: Einträge pro Seite
+  setting_failed_login_header: "Header für fehlgeschlagene Anmeldungen"
 
   info_log_setting: Wählen Sie aus, welche Ereignisse protokolliert werden sollen
   info_audit_api: Auch API-Zugriffe protokollieren
   info_audit_api_filter_out_keys: API-Schlüssel in URL durch [FILTERED] ersetzen
   info_audit_rows_per_page: Anzahl der Protokolleinträge pro Seite
+  info_failed_login_header: "X-Login-Failed-Reason bei fehlgeschlagenen Anmeldungen senden, für Ratenbegrenzung am Load Balancer (dort entfernen)"
 
   # Logging setting options
   settings:

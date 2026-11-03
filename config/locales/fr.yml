@@ -27,11 +27,13 @@ fr:
   setting_audit_api: Auditer l'API
   setting_audit_api_filter_out_keys: Filtrer les clés API
   setting_audit_rows_per_page: Lignes par page
+  setting_failed_login_header: "En-tête de connexion échouée"
 
   info_log_setting: Sélectionnez les événements à journaliser
   info_audit_api: Journaliser également les accès API
   info_audit_api_filter_out_keys: Remplacer les clés API dans l'URL par [FILTERED]
   info_audit_rows_per_page: Nombre d'entrées par page
+  info_failed_login_header: "Envoyer X-Login-Failed-Reason lors des connexions échouées, pour limiter le débit au répartiteur de charge (l'y supprimer)"
 
   # Logging setting options
   settings:

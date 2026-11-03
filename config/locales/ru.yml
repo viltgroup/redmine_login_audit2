@@ -29,11 +29,13 @@ ru:
   setting_audit_api: Аудит API
   setting_audit_api_filter_out_keys: Фильтровать ключи API
   setting_audit_rows_per_page: Записей на странице
+  setting_failed_login_header: "Заголовок неудачного входа"
 
   info_log_setting: Выберите какие события записывать
   info_audit_api: Также записывать доступ через API
   info_audit_api_filter_out_keys: Заменять ключи API в URL на [FILTERED]
   info_audit_rows_per_page: Количество записей на странице
+  info_failed_login_header: "Отправлять X-Login-Failed-Reason при неудачном входе для ограничения частоты на балансировщике (удалять его там)"
 
   # Logging setting options
   settings:

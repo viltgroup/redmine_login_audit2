@@ -27,11 +27,13 @@ es:
   setting_audit_api: Auditar API
   setting_audit_api_filter_out_keys: Filtrar claves API
   setting_audit_rows_per_page: Filas por página
+  setting_failed_login_header: "Cabecera de inicio de sesión fallido"
 
   info_log_setting: Seleccione qué eventos registrar
   info_audit_api: También registrar acceso API
   info_audit_api_filter_out_keys: Reemplazar claves API en URL con [FILTERED]
   info_audit_rows_per_page: Número de entradas por página
+  info_failed_login_header: "Enviar X-Login-Failed-Reason en inicios de sesión fallidos, para limitar la tasa en el balanceador (eliminarla allí)"
 
   # Logging setting options
   settings:

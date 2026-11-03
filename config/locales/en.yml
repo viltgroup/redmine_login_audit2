@@ -26,11 +26,13 @@ en:
   setting_audit_api: Audit API
   setting_audit_api_filter_out_keys: Filter API Keys
   setting_audit_rows_per_page: Rows per Page
+  setting_failed_login_header: "Failed Login Header"
 
   info_log_setting: Select which events to log
   info_audit_api: Also log API access
   info_audit_api_filter_out_keys: Replace API keys in URL with [FILTERED]
   info_audit_rows_per_page: Number of log entries to display per page
+  info_failed_login_header: "Send X-Login-Failed-Reason on failed logins, for rate limiting at the load balancer (strip it there)"
 
   # Logging setting options
   settings:

@@ -27,11 +27,13 @@ pt-BR:
   setting_audit_api: Auditar API
   setting_audit_api_filter_out_keys: Filtrar chaves de API
   setting_audit_rows_per_page: Linhas por página
+  setting_failed_login_header: "Cabeçalho de login falhado"
 
   info_log_setting: Selecione quais eventos registrar
   info_audit_api: Também registrar acesso à API
   info_audit_api_filter_out_keys: Substituir chaves de API na URL por [FILTERED]
   info_audit_rows_per_page: Número de entradas por página
+  info_failed_login_header: "Enviar X-Login-Failed-Reason em logins falhados, para limitar a taxa no balanceador de carga (removê-lo lá)"
 
   # Logging setting options
   settings:

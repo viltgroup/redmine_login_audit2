@@ -27,11 +27,13 @@ zh:
   setting_audit_api: 审计API
   setting_audit_api_filter_out_keys: 过滤API密钥
   setting_audit_rows_per_page: 每页行数
+  setting_failed_login_header: "登录失败标头"
 
   info_log_setting: 选择要记录的事件
   info_audit_api: 同时记录API访问
   info_audit_api_filter_out_keys: 将URL中的API密钥替换为[FILTERED]
   info_audit_rows_per_page: 每页显示的日志条目数
+  info_failed_login_header: "登录失败时发送 X-Login-Failed-Reason，供负载均衡器限流使用（需在负载均衡器处移除）"
 
   # Logging setting options
   settings:

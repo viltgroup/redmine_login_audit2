@@ -28,6 +28,8 @@ module RedmineLoginAudit2
 
     # The value is a reason, never a count: a successful login sends no header at all
     def flag_login_failure(reason)
+      return unless RedmineLoginAudit2.failed_login_header_enabled?
+
       response.set_header(RedmineLoginAudit2::FAILED_LOGIN_HEADER, reason)
     end
 
