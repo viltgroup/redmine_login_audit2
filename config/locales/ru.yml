@@ -30,12 +30,19 @@ ru:
   setting_audit_api_filter_out_keys: Фильтровать ключи API
   setting_audit_rows_per_page: Записей на странице
   setting_failed_login_header: "Заголовок неудачного входа"
+  setting_attempts_limit_enabled: "Ограничить попытки входа"
+  setting_attempts_limit: "Лимит попыток"
+  setting_block_minutes: "Длительность блокировки (мин)"
 
   info_log_setting: Выберите какие события записывать
   info_audit_api: Также записывать доступ через API
   info_audit_api_filter_out_keys: Заменять ключи API в URL на [FILTERED]
   info_audit_rows_per_page: Количество записей на странице
   info_failed_login_header: "Отправлять X-Login-Failed-Reason при неудачном входе для ограничения частоты на балансировщике (удалять его там)"
+  info_attempts_limit_enabled: "Блокировать логин после слишком многих неверных паролей — в форме входа и при HTTP Basic-аутентификации API."
+  info_attempts_limit: "Число неудачных попыток до блокировки логина"
+  info_block_minutes: "Сколько длится блокировка после последней неудачи. Неудачи с большим интервалом не суммируются"
+  label_la_currently_blocked: "Сейчас заблокировано: %{count}"
 
   # Logging setting options
   settings:
@@ -48,6 +55,13 @@ ru:
   # Notices & Errors
   notice_la_records_deleted: "Удалено %{count} записей старше %{date}"
   notice_la_records_all_deleted: "Удалено все %{count} записей"
+  notice_la_login_blocked: "Слишком много неудачных попыток входа. Повторите попытку позже."
+  notice_la_unblocked: "Разблокировано логинов: %{count}"
+  label_la_blocked_logins: "Заблокированные логины"
+  label_la_failed_count: "Неудачи"
+  label_la_blocked_until: "Заблокирован до"
+  button_la_unblock: "Разблокировать"
+  button_la_unblock_all: "Разблокировать все"
   error_la_bad_parameters: Неверные параметры
 
   # Buttons

@@ -20,6 +20,33 @@
   </p>
 <% end %>
 
+<% if @blocked_attempts.any? %>
+<fieldset class="box">
+  <legend><%= l(:label_la_blocked_logins) %> (<%= @blocked_attempts.size %>)</legend>
+  <table class="list login-audit-blocks">
+    <thead>
+      <tr>
+        <th><%= l(:field_login) %></th>
+        <th><%= l(:label_la_failed_count) %></th>
+        <th><%= l(:label_la_blocked_until) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @blocked_attempts.each do |attempt| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td class="login"><%= h attempt.login %></td>
+        <td><%= attempt.failed_count %></td>
+        <td><%= format_time(attempt.blocked_until) %></td>
+        <td class="buttons"><%= button_to l(:button_la_unblock), { action: 'unblock', login: attempt.login }, class: 'button' %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= button_to l(:button_la_unblock_all), { action: 'unblock' }, class: 'button' %>
+</fieldset>
+<% end %>
+
 <p class="subtitle"><%= l(:label_total) %>: <%= @audit_count %></p>
 
 <div class="autoscroll">

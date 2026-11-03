@@ -27,6 +27,28 @@
   </p>
 
   <p>
+    <label><%= l(:setting_attempts_limit_enabled) %></label>
+    <%= hidden_field_tag 'settings[attempts_limit_enabled]', '0', id: nil %>
+    <%= check_box_tag 'settings[attempts_limit_enabled]', '1', RedmineLoginAudit2.attempts_limit_enabled? %>
+    <em class="info">
+      <%= l(:info_attempts_limit_enabled) %>
+      <%= link_to l(:label_la_currently_blocked, count: LoginAuditAttempt.blocking.count), { controller: 'login_audit', action: 'index' } %>
+    </em>
+  </p>
+
+  <p>
+    <label><%= l(:setting_attempts_limit) %></label>
+    <%= number_field_tag 'settings[attempts_limit]', RedmineLoginAudit2.attempts_limit, min: 1, size: 5 %>
+    <em class="info"><%= l(:info_attempts_limit) %></em>
+  </p>
+
+  <p>
+    <label><%= l(:setting_block_minutes) %></label>
+    <%= number_field_tag 'settings[block_minutes]', RedmineLoginAudit2.block_minutes, min: 1, size: 5 %>
+    <em class="info"><%= l(:info_block_minutes) %></em>
+  </p>
+
+  <p>
     <label><%= l(:setting_audit_rows_per_page) %></label>
     <%= text_field_tag 'settings[audit_rows_per_page]', @settings['audit_rows_per_page'], size: 5 %>
     <em class="info"><%= l(:info_audit_rows_per_page) %></em>

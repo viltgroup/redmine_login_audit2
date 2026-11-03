@@ -28,12 +28,19 @@ es:
   setting_audit_api_filter_out_keys: Filtrar claves API
   setting_audit_rows_per_page: Filas por página
   setting_failed_login_header: "Cabecera de inicio de sesión fallido"
+  setting_attempts_limit_enabled: "Limitar intentos de inicio de sesión"
+  setting_attempts_limit: "Límite de intentos"
+  setting_block_minutes: "Minutos de bloqueo"
 
   info_log_setting: Seleccione qué eventos registrar
   info_audit_api: También registrar acceso API
   info_audit_api_filter_out_keys: Reemplazar claves API en URL con [FILTERED]
   info_audit_rows_per_page: Número de entradas por página
   info_failed_login_header: "Enviar X-Login-Failed-Reason en inicios de sesión fallidos, para limitar la tasa en el balanceador (eliminarla allí)"
+  info_attempts_limit_enabled: "Bloquear un nombre de usuario tras demasiadas contraseñas incorrectas, en el formulario de inicio de sesión y en la autenticación HTTP Basic de la API."
+  info_attempts_limit: "Intentos fallidos que bloquean el nombre de usuario"
+  info_block_minutes: "Cuánto dura el bloqueo tras el último fallo. Los fallos más separados que esto no se suman"
+  label_la_currently_blocked: "Bloqueados ahora: %{count}"
 
   # Logging setting options
   settings:
@@ -46,6 +53,13 @@ es:
   # Notices & Errors
   notice_la_records_deleted: "Eliminados %{count} registros anteriores a %{date}"
   notice_la_records_all_deleted: "Eliminados todos los %{count} registros"
+  notice_la_login_blocked: "Demasiados intentos fallidos de inicio de sesión. Inténtelo de nuevo más tarde."
+  notice_la_unblocked: "%{count} nombres de usuario desbloqueados"
+  label_la_blocked_logins: "Nombres de usuario bloqueados"
+  label_la_failed_count: "Fallos"
+  label_la_blocked_until: "Bloqueado hasta"
+  button_la_unblock: "Desbloquear"
+  button_la_unblock_all: "Desbloquear todos"
   error_la_bad_parameters: Parámetros inválidos
 
   # Buttons

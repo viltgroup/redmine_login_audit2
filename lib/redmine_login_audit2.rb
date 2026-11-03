@@ -11,6 +11,8 @@ module RedmineLoginAudit2
       require File.dirname(__FILE__) + '/redmine_login_audit2/account_controller_patch'
       require File.dirname(__FILE__) + '/redmine_login_audit2/application_controller_patch'
       require File.dirname(__FILE__) + '/redmine_login_audit2/hooks'
+      require File.dirname(__FILE__) + '/redmine_login_audit2/current'
+      require File.dirname(__FILE__) + '/redmine_login_audit2/user_patch'
 
       # Apply patches
       unless AccountController.included_modules.include?(RedmineLoginAudit2::AccountControllerPatch)
@@ -19,6 +21,10 @@ module RedmineLoginAudit2
 
       unless ApplicationController.included_modules.include?(RedmineLoginAudit2::ApplicationControllerPatch)
         ApplicationController.prepend(RedmineLoginAudit2::ApplicationControllerPatch)
+      end
+
+      unless User.included_modules.include?(RedmineLoginAudit2::UserPatch)
+        User.prepend(RedmineLoginAudit2::UserPatch)
       end
 
       # Check if redmine_saml plugin is installed
@@ -36,10 +42,33 @@ module RedmineLoginAudit2
       !settings.is_a?(Hash) || settings['failed_login_header'].to_s != '0'
     end
 
+    # Off unless switched on: absent means disabled
+    def attempts_limit_enabled?
+      settings = Setting.plugin_redmine_login_audit2
+      settings.is_a?(Hash) && settings['attempts_limit_enabled'].to_s == '1'
+    end
+
+    def attempts_limit
+      [plugin_setting_integer('attempts_limit', 5), 1].max
+    end
+
+    def block_minutes
+      [plugin_setting_integer('block_minutes', 15), 1].max
+    end
+
     def saml_plugin_installed?
       Redmine::Plugin.installed?(:redmine_saml)
     rescue
       false
+    end
+
+    private
+
+    # A value that was never saved falls back to the default, like failed_login_header above
+    def plugin_setting_integer(key, default)
+      settings = Setting.plugin_redmine_login_audit2
+      value = settings.is_a?(Hash) ? settings[key].to_s : ''
+      value.match?(/\A\d+\z/) ? value.to_i : default
     end
   end
 end

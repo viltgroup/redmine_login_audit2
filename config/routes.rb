@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     get  'login_audit/stats',      to: 'login_audit#stats'
     post 'login_audit/delete',     to: 'login_audit#delete'
     post 'login_audit/delete_all', to: 'login_audit#delete_all'
+    post 'login_audit/unblock',    to: 'login_audit#unblock'
     get  'login_audit/export',     to: 'login_audit#export'
   end
 end

@@ -27,12 +27,19 @@ en:
   setting_audit_api_filter_out_keys: Filter API Keys
   setting_audit_rows_per_page: Rows per Page
   setting_failed_login_header: "Failed Login Header"
+  setting_attempts_limit_enabled: "Limit Login Attempts"
+  setting_attempts_limit: "Attempts Limit"
+  setting_block_minutes: "Block Minutes"
 
   info_log_setting: Select which events to log
   info_audit_api: Also log API access
   info_audit_api_filter_out_keys: Replace API keys in URL with [FILTERED]
   info_audit_rows_per_page: Number of log entries to display per page
   info_failed_login_header: "Send X-Login-Failed-Reason on failed logins, for rate limiting at the load balancer (strip it there)"
+  info_attempts_limit_enabled: "Block a login name after too many failed passwords, on the login form and on API HTTP Basic authentication."
+  info_attempts_limit: "Failed attempts that block the login name"
+  info_block_minutes: "How long a block lasts after the last failure. Failures further apart than this are not added up"
+  label_la_currently_blocked: "Currently blocked: %{count}"
 
   # Logging setting options
   settings:
@@ -45,6 +52,13 @@ en:
   # Notices & Errors
   notice_la_records_deleted: "Deleted %{count} log entries older than %{date}"
   notice_la_records_all_deleted: "Deleted all %{count} log entries"
+  notice_la_login_blocked: "Too many failed login attempts. Please try again later."
+  notice_la_unblocked: "Unblocked %{count} login names"
+  label_la_blocked_logins: "Blocked login names"
+  label_la_failed_count: "Failures"
+  label_la_blocked_until: "Blocked until"
+  button_la_unblock: "Unblock"
+  button_la_unblock_all: "Unblock all"
   error_la_bad_parameters: Invalid parameters
 
   # Buttons

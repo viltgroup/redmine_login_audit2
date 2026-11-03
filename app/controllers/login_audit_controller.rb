@@ -34,6 +34,19 @@ class LoginAuditController < ApplicationController
                 .to_a
 
     @oldest_audit = LoginAudit.order(created_on: :asc).first
+    @blocked_attempts = LoginAuditAttempt.blocking.order(last_failed_at: :desc).to_a
+  end
+
+  # Ends the block on one login name, or on all of them along with every failure counted so far
+  def unblock
+    count = if params[:login].present?
+              LoginAuditAttempt.clear(params[:login])
+            else
+              LoginAuditAttempt.blocking.count.tap { LoginAuditAttempt.delete_all }
+            end
+
+    flash[:notice] = l(:notice_la_unblocked, count: count.to_s)
+    redirect_to action: 'index'
   end
 
   def show

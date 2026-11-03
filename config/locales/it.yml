@@ -28,12 +28,19 @@ it:
   setting_audit_api_filter_out_keys: Filtra chiavi API
   setting_audit_rows_per_page: Righe per pagina
   setting_failed_login_header: "Header accesso fallito"
+  setting_attempts_limit_enabled: "Limita i tentativi di accesso"
+  setting_attempts_limit: "Limite di tentativi"
+  setting_block_minutes: "Minuti di blocco"
 
   info_log_setting: Seleziona quali eventi registrare
   info_audit_api: Registra anche gli accessi API
   info_audit_api_filter_out_keys: Sostituisci le chiavi API nell'URL con [FILTERED]
   info_audit_rows_per_page: Numero di voci per pagina
   info_failed_login_header: "Invia X-Login-Failed-Reason sugli accessi falliti, per limitare la frequenza sul load balancer (rimuoverlo lì)"
+  info_attempts_limit_enabled: "Blocca un nome utente dopo troppe password errate, nel modulo di accesso e nell'autenticazione HTTP Basic dell'API."
+  info_attempts_limit: "Tentativi falliti che bloccano il nome utente"
+  info_block_minutes: "Durata del blocco dopo l'ultimo fallimento. I fallimenti più distanti di così non si sommano"
+  label_la_currently_blocked: "Attualmente bloccati: %{count}"
 
   # Logging setting options
   settings:
@@ -46,6 +53,13 @@ it:
   # Notices & Errors
   notice_la_records_deleted: "Eliminati %{count} log precedenti a %{date}"
   notice_la_records_all_deleted: "Eliminati tutti i %{count} log"
+  notice_la_login_blocked: "Troppi tentativi di accesso falliti. Riprova più tardi."
+  notice_la_unblocked: "%{count} nomi utente sbloccati"
+  label_la_blocked_logins: "Nomi utente bloccati"
+  label_la_failed_count: "Fallimenti"
+  label_la_blocked_until: "Bloccato fino a"
+  button_la_unblock: "Sblocca"
+  button_la_unblock_all: "Sblocca tutti"
   error_la_bad_parameters: Parametri non validi
 
   # Buttons

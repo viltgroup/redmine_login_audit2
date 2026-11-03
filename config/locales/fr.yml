@@ -28,12 +28,19 @@ fr:
   setting_audit_api_filter_out_keys: Filtrer les clés API
   setting_audit_rows_per_page: Lignes par page
   setting_failed_login_header: "En-tête de connexion échouée"
+  setting_attempts_limit_enabled: "Limiter les tentatives de connexion"
+  setting_attempts_limit: "Nombre maximal de tentatives"
+  setting_block_minutes: "Durée du blocage (minutes)"
 
   info_log_setting: Sélectionnez les événements à journaliser
   info_audit_api: Journaliser également les accès API
   info_audit_api_filter_out_keys: Remplacer les clés API dans l'URL par [FILTERED]
   info_audit_rows_per_page: Nombre d'entrées par page
   info_failed_login_header: "Envoyer X-Login-Failed-Reason lors des connexions échouées, pour limiter le débit au répartiteur de charge (l'y supprimer)"
+  info_attempts_limit_enabled: "Bloquer un identifiant après trop de mots de passe erronés, sur le formulaire de connexion et en authentification HTTP Basic de l'API."
+  info_attempts_limit: "Tentatives échouées qui bloquent l'identifiant"
+  info_block_minutes: "Durée du blocage après le dernier échec. Les échecs plus espacés que cette durée ne s'additionnent pas"
+  label_la_currently_blocked: "Actuellement bloqués : %{count}"
 
   # Logging setting options
   settings:
@@ -46,6 +53,13 @@ fr:
   # Notices & Errors
   notice_la_records_deleted: "%{count} entrées antérieures à %{date} supprimées"
   notice_la_records_all_deleted: "Toutes les %{count} entrées supprimées"
+  notice_la_login_blocked: "Trop de tentatives de connexion échouées. Veuillez réessayer plus tard."
+  notice_la_unblocked: "%{count} identifiants débloqués"
+  label_la_blocked_logins: "Identifiants bloqués"
+  label_la_failed_count: "Échecs"
+  label_la_blocked_until: "Bloqué jusqu'à"
+  button_la_unblock: "Débloquer"
+  button_la_unblock_all: "Tout débloquer"
   error_la_bad_parameters: Paramètres invalides
 
   # Buttons

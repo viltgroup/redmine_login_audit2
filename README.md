@@ -10,6 +10,7 @@ This is a refactored version of the original [redmine_login_audit](https://githu
 - **API Access Logging**: Tracks REST API authentication
 - **SAML/SSO Support**: Captures failed logins for locked users via SSO (e.g., Okta, KeyCloak)
 - **Failed Login Header**: Marks failed logins with `X-Login-Failed-Reason` so a load balancer can rate limit them
+- **Login Attempts Limit**: Optionally blocks a login name for a while after too many failed passwords
 - **Admin Interface**: View logs with filtering, sorting, and CSV export
 - **Log Purging**: Bulk deletion of old records with safety confirmation
 
@@ -87,6 +88,9 @@ Navigate to "Administration" → "Plugins" → "Redmine Login Audit 2" → "Conf
 | Audit API       | Also log REST API access                        |
 | Filter API Keys | Replace API keys in URL with [FILTERED]         |
 | Failed Login Header | Send `X-Login-Failed-Reason` on failed logins (on by default, see below) |
+| Limit Login Attempts | Block a login name after too many failed passwords (off by default, see below) |
+| Attempts Limit  | Failed attempts that block the login name (default 5) |
+| Block Minutes   | How long a block lasts after the last failure (default 15) |
 | Rows per Page   | Number of entries per page in admin view        |
 
 ## Usage
@@ -146,6 +150,7 @@ value names the reason; a successful login, or a request that presented no crede
 | `locked`      | Right password on the login form, but the account is locked or not activated yet             |
 | `api_key`     | An API key (`key` parameter or `X-Redmine-API-Key` header) that matches no active user       |
 | `token`       | An OAuth bearer token that is unknown, expired or revoked                                    |
+| `blocked`     | The login name is blocked by the attempts limit, so the password was not checked              |
 
 Not flagged: SSO callbacks (the provider has already authenticated the person), and HTTP Basic requests with the right
 password that core refuses anyway (two-factor authentication active, password change required). HTTP Basic with the
@@ -166,10 +171,34 @@ frontend https
     http-request deny deny_status 429 if login_ish { src,table_gpc0_rate(st_login) gt 20 }
 
     http-response track-sc0 src table st_login if { res.hdr(x-login-failed-reason) -m found }
-    http-response sc-inc-gpc0(0) if { res.hdr(x-login-failed-reason) -m str credentials locked }
+    http-response sc-inc-gpc0(0) if { res.hdr(x-login-failed-reason) -m str credentials locked blocked }
     http-response sc-inc-gpc0(0) if { res.hdr(x-login-failed-reason) -m str api_key token } !internal
     http-response del-header x-login-failed-reason
 ```
+
+## Login Attempts Limit
+
+Off by default. Switch it on with **Limit Login Attempts** on the plugin's configuration page. After **Attempts
+Limit** failed passwords for one login name, that login name is refused for **Block Minutes**, counted from the last
+failure. While it is blocked the password is not checked at all, so a correct password does not get in either, and
+LDAP is not asked. The login form says "Too many failed login attempts" and the response carries
+`X-Login-Failed-Reason: blocked`.
+
+- **Applies to** every password check: the login form, HTTP Basic on the REST API, and other plugins' HTTP Basic
+  (redmine_mcp_plugin). Not to SSO, API keys or OAuth tokens, which have no password to guess.
+- **Counted per login name**, case-insensitively, whether or not the account exists, so a block does not reveal
+  which accounts exist. Failures further apart than Block Minutes are not added up.
+- **Ends** when Block Minutes have passed since the last failure, on a password change (reset, administrator), or
+  when an administrator unblocks it under **Administration → Login Audit**, which lists the blocked login names.
+  A successful login resets the count.
+- **Shared by all application servers**: the counts live in the `login_audit_attempts` table, not in process memory,
+  so every node and worker sees the same count, and a restart does not lift a block.
+- **Anyone can block an account** by failing its password on purpose, so keep Block Minutes short. Per source IP
+  limits belong to the load balancer (see Failed Login Header above); this one stops an attack that spreads across
+  many addresses.
+
+Unlike [redmine_login_attempts_limit](https://github.com/midnightSuyama/redmine_login_attempts_limit), which this
+follows, there is no email on a block: it would let anyone mail any user, and the administrators, at will.
 
 ## SAML Plugin Compatibility
 
@@ -281,6 +310,7 @@ If failure logging doesn't work:
 ### Unreleased (VILT fork)
 
 - Added the `X-Login-Failed-Reason` response header (`credentials`, `locked`, `api_key`, `token`) on failed logins, for rate limiting at the load balancer, switchable with the new **Failed Login Header** setting (on by default)
+- Added the login attempts limit (off by default): blocks a login name for a while after too many failed passwords, on the login form and HTTP Basic, with counts in the new `login_audit_attempts` table so they hold across application servers. Blocked login names are listed, and can be unblocked, under Login Audit. New header reason `blocked`
 - Security: no longer replaces core's `password_authentication`. The override skipped two-factor authentication, so an account with 2FA could log in with its password alone, and it did not check that the account was active. Failures are now recorded from core's `invalid_credentials`, `account_locked` and `account_pending`, which SSO plugins such as redmine_oauth also report through
 - Fixed logins with a URL over 255 characters (every OAuth callback) never being recorded: truncation ran in `before_create`, after the length validation had already rejected the row
 - OAuth callback parameters `code`, `state` and `session_state` are filtered out of the recorded URL and referer

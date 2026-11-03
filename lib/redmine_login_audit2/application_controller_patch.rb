@@ -51,7 +51,7 @@ module RedmineLoginAudit2
       elsif Doorkeeper::OAuth::Token.from_request(request, *Doorkeeper.config.access_token_methods)
         'token'
       elsif /\ABasic /i.match?(request.authorization.to_s) && !performed?
-        'credentials'
+        RedmineLoginAudit2::Current.login_blocked ? 'blocked' : 'credentials'
       end
     end
 

@@ -28,12 +28,19 @@ ko:
   setting_audit_api_filter_out_keys: API 키 필터링
   setting_audit_rows_per_page: 페이지당 행 수
   setting_failed_login_header: "로그인 실패 헤더"
+  setting_attempts_limit_enabled: "로그인 시도 제한"
+  setting_attempts_limit: "시도 횟수 제한"
+  setting_block_minutes: "차단 시간(분)"
 
   info_log_setting: 기록할 이벤트를 선택하세요
   info_audit_api: API 접근도 기록
   info_audit_api_filter_out_keys: URL의 API 키를 [FILTERED]로 대체
   info_audit_rows_per_page: 페이지당 표시할 항목 수
   info_failed_login_header: "로그인 실패 시 X-Login-Failed-Reason을 보내 로드 밸런서에서 속도 제한에 사용 (로드 밸런서에서 제거할 것)"
+  info_attempts_limit_enabled: "비밀번호가 너무 많이 틀린 로그인 이름을 차단합니다 (로그인 양식 및 API HTTP Basic 인증)."
+  info_attempts_limit: "로그인 이름을 차단하는 실패 횟수"
+  info_block_minutes: "마지막 실패 후 차단이 유지되는 시간. 이보다 간격이 큰 실패는 합산하지 않음"
+  label_la_currently_blocked: "현재 차단됨: %{count}"
 
   # Logging setting options
   settings:
@@ -46,6 +53,13 @@ ko:
   # Notices & Errors
   notice_la_records_deleted: "%{date} 이전의 %{count}개 로그를 삭제했습니다"
   notice_la_records_all_deleted: "모든 %{count}개 로그를 삭제했습니다"
+  notice_la_login_blocked: "로그인 실패가 너무 많습니다. 잠시 후 다시 시도하세요."
+  notice_la_unblocked: "로그인 이름 %{count}개 차단 해제"
+  label_la_blocked_logins: "차단된 로그인 이름"
+  label_la_failed_count: "실패 횟수"
+  label_la_blocked_until: "차단 해제 시각"
+  button_la_unblock: "차단 해제"
+  button_la_unblock_all: "모두 차단 해제"
   error_la_bad_parameters: 잘못된 매개변수
 
   # Buttons

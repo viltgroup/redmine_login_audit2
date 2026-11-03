@@ -28,12 +28,19 @@ de:
   setting_audit_api_filter_out_keys: API-Schlüssel filtern
   setting_audit_rows_per_page: Einträge pro Seite
   setting_failed_login_header: "Header für fehlgeschlagene Anmeldungen"
+  setting_attempts_limit_enabled: "Anmeldeversuche begrenzen"
+  setting_attempts_limit: "Maximale Fehlversuche"
+  setting_block_minutes: "Sperrdauer (Minuten)"
 
   info_log_setting: Wählen Sie aus, welche Ereignisse protokolliert werden sollen
   info_audit_api: Auch API-Zugriffe protokollieren
   info_audit_api_filter_out_keys: API-Schlüssel in URL durch [FILTERED] ersetzen
   info_audit_rows_per_page: Anzahl der Protokolleinträge pro Seite
   info_failed_login_header: "X-Login-Failed-Reason bei fehlgeschlagenen Anmeldungen senden, für Ratenbegrenzung am Load Balancer (dort entfernen)"
+  info_attempts_limit_enabled: "Einen Anmeldenamen nach zu vielen falschen Passwörtern sperren, im Anmeldeformular und bei HTTP-Basic-Authentifizierung der API."
+  info_attempts_limit: "Fehlversuche, nach denen der Anmeldename gesperrt wird"
+  info_block_minutes: "Wie lange die Sperre nach dem letzten Fehlversuch dauert. Weiter auseinanderliegende Fehlversuche werden nicht zusammengezählt"
+  label_la_currently_blocked: "Derzeit gesperrt: %{count}"
 
   # Logging setting options
   settings:
@@ -46,6 +53,13 @@ de:
   # Notices & Errors
   notice_la_records_deleted: "%{count} Protokolleinträge älter als %{date} gelöscht"
   notice_la_records_all_deleted: "Alle %{count} Protokolleinträge gelöscht"
+  notice_la_login_blocked: "Zu viele fehlgeschlagene Anmeldeversuche. Bitte versuchen Sie es später erneut."
+  notice_la_unblocked: "%{count} Anmeldenamen entsperrt"
+  label_la_blocked_logins: "Gesperrte Anmeldenamen"
+  label_la_failed_count: "Fehlversuche"
+  label_la_blocked_until: "Gesperrt bis"
+  button_la_unblock: "Entsperren"
+  button_la_unblock_all: "Alle entsperren"
   error_la_bad_parameters: Ungültige Parameter
 
   # Buttons

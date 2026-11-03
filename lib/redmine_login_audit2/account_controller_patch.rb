@@ -59,8 +59,11 @@ module RedmineLoginAudit2
     # Wrong login or password, or a user an SSO plugin could not match
     def invalid_credentials
       LoginAudit.failure(nil, request, params)
-      flag_login_failure('credentials') if password_login?
+      blocked = RedmineLoginAudit2::Current.login_blocked
+      flag_login_failure(blocked ? 'blocked' : 'credentials') if password_login?
       super
+      # Refused by the attempts limit, the password unchecked: say so rather than "invalid user or password"
+      flash.now[:error] = l(:notice_la_login_blocked) if blocked
     end
 
     # Right credentials, but the account is locked or not activated yet

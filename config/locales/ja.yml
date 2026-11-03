@@ -28,12 +28,19 @@ ja:
   setting_audit_api_filter_out_keys: APIキーをフィルタ
   setting_audit_rows_per_page: 1ページの表示件数
   setting_failed_login_header: "ログイン失敗ヘッダー"
+  setting_attempts_limit_enabled: "ログイン試行回数の制限"
+  setting_attempts_limit: "試行回数の上限"
+  setting_block_minutes: "ブロック時間（分）"
 
   info_log_setting: どのイベントを記録するか選択します
   info_audit_api: API経由のアクセスも記録する
   info_audit_api_filter_out_keys: URLに含まれるAPIキーを[FILTERED]に置換する
   info_audit_rows_per_page: 管理画面で1ページに表示するログの件数
   info_failed_login_header: "ログイン失敗時に X-Login-Failed-Reason を送信し、ロードバランサーでのレート制限に使う（ロードバランサーで削除すること）"
+  info_attempts_limit_enabled: "パスワードの誤りが多すぎるログイン名をブロックする（ログインフォームおよびAPIのHTTP Basic認証）。"
+  info_attempts_limit: "ログイン名をブロックするまでの失敗回数"
+  info_block_minutes: "最後の失敗からブロックが続く時間。これより間隔の空いた失敗は合算しない"
+  label_la_currently_blocked: "現在ブロック中: %{count}"
 
   # ログ設定の選択肢
   settings:
@@ -46,6 +53,13 @@ ja:
   # 通知・エラー
   notice_la_records_deleted: "%{date}より前の%{count}件のログを削除しました"
   notice_la_records_all_deleted: "%{count}件のログをすべて削除しました"
+  notice_la_login_blocked: "ログインの失敗が多すぎます。しばらくしてから再度お試しください。"
+  notice_la_unblocked: "%{count} 件のログイン名のブロックを解除しました"
+  label_la_blocked_logins: "ブロック中のログイン名"
+  label_la_failed_count: "失敗回数"
+  label_la_blocked_until: "ブロック解除予定"
+  button_la_unblock: "ブロック解除"
+  button_la_unblock_all: "すべてのブロックを解除"
   error_la_bad_parameters: パラメータが不正です
 
   # ボタン

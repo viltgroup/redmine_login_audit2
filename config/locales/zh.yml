@@ -28,12 +28,19 @@ zh:
   setting_audit_api_filter_out_keys: 过滤API密钥
   setting_audit_rows_per_page: 每页行数
   setting_failed_login_header: "登录失败标头"
+  setting_attempts_limit_enabled: "限制登录尝试"
+  setting_attempts_limit: "尝试次数上限"
+  setting_block_minutes: "封锁时长（分钟）"
 
   info_log_setting: 选择要记录的事件
   info_audit_api: 同时记录API访问
   info_audit_api_filter_out_keys: 将URL中的API密钥替换为[FILTERED]
   info_audit_rows_per_page: 每页显示的日志条目数
   info_failed_login_header: "登录失败时发送 X-Login-Failed-Reason，供负载均衡器限流使用（需在负载均衡器处移除）"
+  info_attempts_limit_enabled: "密码错误次数过多时封锁该登录名（登录表单及 API 的 HTTP Basic 认证）。"
+  info_attempts_limit: "封锁登录名前允许的失败次数"
+  info_block_minutes: "最后一次失败后封锁持续的时间。间隔超过此时长的失败不累计"
+  label_la_currently_blocked: "当前封锁：%{count}"
 
   # Logging setting options
   settings:
@@ -46,6 +53,13 @@ zh:
   # Notices & Errors
   notice_la_records_deleted: "已删除 %{date} 之前的 %{count} 条日志"
   notice_la_records_all_deleted: "已删除全部 %{count} 条日志"
+  notice_la_login_blocked: "登录失败次数过多，请稍后再试。"
+  notice_la_unblocked: "已解除 %{count} 个登录名的封锁"
+  label_la_blocked_logins: "已封锁的登录名"
+  label_la_failed_count: "失败次数"
+  label_la_blocked_until: "封锁至"
+  button_la_unblock: "解除封锁"
+  button_la_unblock_all: "全部解除封锁"
   error_la_bad_parameters: 参数无效
 
   # Buttons
